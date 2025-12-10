@@ -37,6 +37,8 @@ const Footer = () => {
                         <a
                             key={i}
                             href={social.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="soft-btn"
                             style={{
                                 borderRadius: '50%',

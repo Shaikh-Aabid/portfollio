@@ -582,7 +582,32 @@ footer p {
   50% { opacity: 0.5; }
 }
 
-/* Responsive */
+/* Responsive - Tablet */
+@media (max-width: 992px) {
+  .container {
+    padding: 0 20px;
+  }
+  
+  .section {
+    padding: 100px 0;
+  }
+  
+  .hero-content,
+  .hero-image {
+    flex: 1 1 100% !important;
+    text-align: center;
+  }
+  
+  .hero-image {
+    height: 400px !important;
+  }
+  
+  .hero-btns {
+    justify-content: center !important;
+  }
+}
+
+/* Responsive - Mobile */
 @media (max-width: 768px) {
   .section {
     padding: 80px 0;
@@ -600,14 +625,81 @@ footer p {
   .soft-btn {
     padding: 12px 24px;
     font-size: 0.9rem;
+    min-height: 48px; /* Touch-friendly size */
   }
   
   .stats {
     gap: 1.5rem !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
   }
   
-  .stats h3 {
-    font-size: 2.5rem !important;
+  .stats > div {
+    flex: 1 1 calc(33% - 1rem);
+    min-width: 80px;
+    text-align: center;
+  }
+  
+  .stats h3,
+  .stats h4 {
+    font-size: 2rem !important;
+  }
+  
+  .navbar .container {
+    padding: 0 16px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.2rem !important;
+  }
+  
+  .hero-content h2 {
+    font-size: 1.3rem !important;
+  }
+  
+  #contact form > div:first-child {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 480px) {
+  .section {
+    padding: 60px 0;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.8rem !important;
+  }
+  
+  .hero-image {
+    height: 300px !important;
+  }
+  
+  .soft-card {
+    padding: 1.25rem;
+  }
+  
+  .soft-btn {
+    padding: 14px 20px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .stats > div {
+    flex: 1 1 100%;
+  }
+  
+  footer .socials {
+    gap: 0.75rem !important;
   }
 }
 
@@ -615,3 +707,16 @@ footer p {
 section[id] {
   scroll-margin-top: 80px;
 }
+
+/* Touch Improvements */
+@media (pointer: coarse) {
+  .soft-btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
