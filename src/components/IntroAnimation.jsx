@@ -79,8 +79,8 @@ const IntroAnimation = ({ onComplete }) => {
             {/* Background glow */}
             <div style={{
                 position: 'absolute',
-                width: '500px',
-                height: '500px',
+                width: 'min(500px, 90vw)',
+                height: 'min(500px, 90vw)',
                 background: 'radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(124, 58, 237, 0.1) 40%, transparent 70%)',
                 filter: 'blur(60px)',
                 pointerEvents: 'none'
@@ -93,12 +93,12 @@ const IntroAnimation = ({ onComplete }) => {
             }}>
                 {/* Screen */}
                 <div style={{
-                    width: '380px',
-                    height: '240px',
+                    width: 'min(380px, 85vw)',
+                    height: 'min(240px, 50vw)',
                     background: 'linear-gradient(180deg, #1e1e2e, #2d2d44)',
                     borderRadius: '16px 16px 0 0',
                     border: '4px solid #3d3d5c',
-                    padding: '15px',
+                    padding: 'min(15px, 3vw)',
                     boxShadow: isEnterPressed
                         ? '0 0 100px rgba(0, 212, 255, 0.6), 0 0 150px rgba(124, 58, 237, 0.4)'
                         : '0 20px 60px rgba(0, 0, 0, 0.5)',
@@ -110,9 +110,9 @@ const IntroAnimation = ({ onComplete }) => {
                         height: '100%',
                         background: '#0d1117',
                         borderRadius: '8px',
-                        padding: '15px',
+                        padding: 'min(15px, 2.5vw)',
                         fontFamily: '"Fira Code", "SF Mono", "Consolas", monospace',
-                        fontSize: '12px',
+                        fontSize: 'clamp(8px, 2.5vw, 12px)',
                         lineHeight: '1.6',
                         overflow: 'hidden'
                     }}>
@@ -163,11 +163,11 @@ const IntroAnimation = ({ onComplete }) => {
 
                 {/* Laptop base */}
                 <div style={{
-                    width: '420px',
+                    width: 'min(420px, 95vw)',
                     height: '18px',
                     background: 'linear-gradient(180deg, #4d4d6d 0%, #3d3d5c 50%, #2d2d44 100%)',
                     borderRadius: '0 0 8px 8px',
-                    marginLeft: '-20px',
+                    marginLeft: 'min(-20px, -2.5vw)',
                     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)'
                 }}>
                     {/* Trackpad notch */}
@@ -187,9 +187,9 @@ const IntroAnimation = ({ onComplete }) => {
                 onClick={handleEnter}
                 disabled={typedCode.length < fullCode.length * 0.5}
                 style={{
-                    marginTop: '3rem',
-                    padding: '18px 60px',
-                    fontSize: '1.2rem',
+                    marginTop: '2rem',
+                    padding: 'min(18px, 3vw) min(60px, 10vw)',
+                    fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
                     fontWeight: '600',
                     fontFamily: 'inherit',
                     background: typedCode.length >= fullCode.length * 0.8
