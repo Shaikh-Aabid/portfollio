@@ -73,8 +73,9 @@ const IntroAnimation = ({ onComplete }) => {
             justifyContent: 'center',
             zIndex: 9999,
             opacity: isExiting ? 0 : 1,
-            transform: isExiting ? 'scale(1.1)' : 'scale(1)',
-            transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+            transform: isExiting ? 'scale(30)' : 'scale(1)',
+            filter: isExiting ? 'blur(10px)' : 'blur(0)',
+            transition: 'transform 0.8s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.8s cubic-bezier(0.7, 0, 0.3, 1), filter 0.8s ease'
         }}>
             {/* Background glow */}
             <div style={{
