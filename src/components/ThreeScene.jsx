@@ -28,7 +28,7 @@ function RobotCharacter() {
                 0.05
             );
 
-            // Floating animation
+            // Floating animation (bobbing)
             groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.5) * 0.15;
         }
 
@@ -53,7 +53,7 @@ function RobotCharacter() {
             <mesh position={[0, -0.3, 0]} castShadow>
                 <capsuleGeometry args={[0.6, 0.8, 8, 16]} />
                 <meshStandardMaterial
-                    color="#1a1a2e"
+                    color="#E0E7FF"
                     metalness={0.8}
                     roughness={0.2}
                 />
@@ -85,7 +85,7 @@ function RobotCharacter() {
                 <mesh castShadow>
                     <sphereGeometry args={[0.5, 32, 32]} />
                     <meshStandardMaterial
-                        color="#16213e"
+                        color="#CBD5E1"
                         metalness={0.9}
                         roughness={0.1}
                     />
@@ -140,12 +140,12 @@ function RobotCharacter() {
             <group position={[-0.8, -0.2, 0]}>
                 <mesh rotation={[0, 0, 0.3]}>
                     <capsuleGeometry args={[0.12, 0.5, 4, 8]} />
-                    <meshStandardMaterial color="#1a1a2e" metalness={0.8} roughness={0.2} />
+                    <meshStandardMaterial color="#E0E7FF" metalness={0.8} roughness={0.2} />
                 </mesh>
                 {/* Hand */}
                 <mesh position={[-0.2, -0.4, 0]}>
                     <sphereGeometry args={[0.15, 16, 16]} />
-                    <meshStandardMaterial color="#16213e" metalness={0.9} roughness={0.1} />
+                    <meshStandardMaterial color="#CBD5E1" metalness={0.9} roughness={0.1} />
                 </mesh>
             </group>
 
@@ -153,13 +153,13 @@ function RobotCharacter() {
             <group position={[0.8, -0.2, 0]}>
                 <mesh rotation={[0, 0, -0.3]}>
                     <capsuleGeometry args={[0.12, 0.5, 4, 8]} />
-                    <meshStandardMaterial color="#1a1a2e" metalness={0.8} roughness={0.2} />
+                    <meshStandardMaterial color="#E0E7FF" metalness={0.8} roughness={0.2} />
                 </mesh>
                 {/* Hand - waving */}
                 <Float speed={4} rotationIntensity={0.5} floatIntensity={0.2}>
                     <mesh position={[0.2, -0.4, 0]}>
                         <sphereGeometry args={[0.15, 16, 16]} />
-                        <meshStandardMaterial color="#16213e" metalness={0.9} roughness={0.1} />
+                        <meshStandardMaterial color="#CBD5E1" metalness={0.9} roughness={0.1} />
                     </mesh>
                 </Float>
             </group>

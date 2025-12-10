@@ -21,7 +21,7 @@ const IntroAnimation = ({ onComplete }) => {
 
     useEffect(() => {
         let index = 0;
-        const typingSpeed = 50;
+        const typingSpeed = 20;
 
         const typeInterval = setInterval(() => {
             if (index < fullCode.length) {
