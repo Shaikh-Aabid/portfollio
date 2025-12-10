@@ -89,6 +89,9 @@ const IntroAnimation = ({ onComplete }) => {
             {/* Laptop */}
             <div style={{
                 position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 animation: 'float 6s ease-in-out infinite'
             }}>
                 {/* Screen */}
@@ -167,7 +170,6 @@ const IntroAnimation = ({ onComplete }) => {
                     height: '18px',
                     background: 'linear-gradient(180deg, #4d4d6d 0%, #3d3d5c 50%, #2d2d44 100%)',
                     borderRadius: '0 0 8px 8px',
-                    marginLeft: 'min(-20px, -2.5vw)',
                     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)'
                 }}>
                     {/* Trackpad notch */}
