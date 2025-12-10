@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Portfolio Contact</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f4f7;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: none;
+            width: 100% !important;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .header {
+            background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .field {
+            margin-bottom: 25px;
+        }
+        .label {
+            font-size: 12px;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .value {
+            font-size: 16px;
+            color: #1a1a1a;
+            line-height: 1.5;
+            padding: 12px;
+            background-color: #f9f9fa;
+            border-radius: 6px;
+            border: 1px solid #e1e1e3;
+        }
+        .message-box {
+            background-color: #f0f7ff;
+            border-left: 4px solid #00d4ff;
+        }
+        .footer {
+            background-color: #f9f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999999;
+            border-top: 1px solid #eeeeee;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #e0e7ff;
+            color: #4338ca;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>New Contact Message</h1>
+        </div>
+        <div class="content">
+            <div class="field">
+                <span class="label">From</span>
+                <div class="value">
+                    <strong>{{name}}</strong> <br>
+                    <a href="mailto:{{email}}" style="color: #7c3aed; text-decoration: none;">{{email}}</a>
+                </div>
+            </div>
+            
+            <div class="field">
+                <span class="label">Subject</span>
+                <div class="value">{{subject}}</div>
+            </div>
+            
+            <div class="field">
+                <span class="label">Message</span>
+                <div class="value message-box">{{message}}</div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Sent from your Portfolio Contact Form</p>
+            <p>&copy; Aabid Hussain Shaikh</p>
+        </div>
+    </div>
+</body>
+</html>
