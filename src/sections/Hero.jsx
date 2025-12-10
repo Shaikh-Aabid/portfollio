@@ -79,7 +79,7 @@ const Hero = () => {
                     marginTop: '2.5rem',
                     flexWrap: 'wrap'
                 }}>
-                    <a href="/Aabid-Hussain-Shaikh-Resume.pdf" download className="soft-btn primary">
+                    <a href={`${import.meta.env.BASE_URL}Aabid-Hussain-Shaikh-Resume.pdf`} download className="soft-btn primary">
                         Download CV <FaDownload style={{ fontSize: '0.9rem' }} />
                     </a>
                     <a href="#contact" className="soft-btn">
