@@ -13,7 +13,6 @@ A personal portfolio website built with HTML, CSS, and JavaScript to showcase sk
 - HTML (≈8%)
 
 ## Demo
-Add a link to a live demo here (e.g., GitHub Pages):  
 https://shaikh-aabid.github.io/portfollio
 
 
