@@ -1,12 +1,12 @@
 import React from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaInstagram, FaHeart } from 'react-icons/fa';
+import { FaGithub, FaLinkedinIn, FaHeart } from 'react-icons/fa';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     const socialLinks = [
         { icon: <FaGithub />, href: 'https://github.com/Shaikh-Aabid', label: 'GitHub' },
-        { icon: <FaLinkedin />, href: 'https://www.linkedin.com/in/aabid-hussain-shaikh/', label: 'LinkedIn' }
+        { icon: <FaLinkedinIn />, href: 'https://www.linkedin.com/in/aabid-hussain-shaikh/', label: 'LinkedIn' }
     ];
 
     return (

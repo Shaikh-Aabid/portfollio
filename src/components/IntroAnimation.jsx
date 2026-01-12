@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 const IntroAnimation = ({ onComplete }) => {
     const [typedCode, setTypedCode] = useState('');
@@ -6,18 +6,18 @@ const IntroAnimation = ({ onComplete }) => {
     const [isEnterPressed, setIsEnterPressed] = useState(false);
     const [isExiting, setIsExiting] = useState(false);
 
-    const codeLines = [
+    const codeLines = useMemo(() => [
         'const developer = {',
         '  name: "Aabid Hussain Shaikh",',
         '  role: "Full Stack Developer",',
-        '  skills: ["React", "Node.js", "MongoDB"],',
+        '  skills: ["Flutter", "Vue.js", "MySQL"],',
         '  passion: "Building amazing experiences"',
         '};',
         '',
         'developer.loadPortfolio();'
-    ];
+    ], []);
 
-    const fullCode = codeLines.join('\n');
+    const fullCode = useMemo(() => codeLines.join('\n'), [codeLines]);
 
     useEffect(() => {
         let index = 0;
@@ -33,7 +33,7 @@ const IntroAnimation = ({ onComplete }) => {
         }, typingSpeed);
 
         return () => clearInterval(typeInterval);
-    }, []);
+    }, [fullCode]);
 
     useEffect(() => {
         const cursorInterval = setInterval(() => {
@@ -54,10 +54,19 @@ const IntroAnimation = ({ onComplete }) => {
 
     useEffect(() => {
         if (typedCode === fullCode) {
-            const autoEnter = setTimeout(handleEnter, 1500);
+            const triggerEnter = () => {
+                if (typedCode.length >= fullCode.length * 0.8) {
+                    setIsEnterPressed(true);
+                    setTimeout(() => {
+                        setIsExiting(true);
+                        setTimeout(onComplete, 800);
+                    }, 500);
+                }
+            };
+            const autoEnter = setTimeout(triggerEnter, 1500);
             return () => clearTimeout(autoEnter);
         }
-    }, [typedCode, fullCode]);
+    }, [typedCode, fullCode, onComplete]);
 
     return (
         <div style={{
@@ -66,7 +75,7 @@ const IntroAnimation = ({ onComplete }) => {
             left: 0,
             width: '100vw',
             height: '100vh',
-            background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%)',
+            background: 'radial-gradient(circle at 50% 50%, #0a0a0f 0%, #000000 100%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -82,7 +91,7 @@ const IntroAnimation = ({ onComplete }) => {
                 position: 'absolute',
                 width: 'min(500px, 90vw)',
                 height: 'min(500px, 90vw)',
-                background: 'radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(124, 58, 237, 0.1) 40%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, rgba(188, 19, 254, 0.05) 40%, transparent 70%)',
                 filter: 'blur(60px)',
                 pointerEvents: 'none'
             }} />
@@ -99,26 +108,27 @@ const IntroAnimation = ({ onComplete }) => {
                 <div style={{
                     width: 'min(380px, 85vw)',
                     height: 'min(240px, 50vw)',
-                    background: 'linear-gradient(180deg, #1e1e2e, #2d2d44)',
-                    borderRadius: '16px 16px 0 0',
-                    border: '4px solid #3d3d5c',
+                    background: '#050505',
+                    borderRadius: '4px 4px 0 0',
+                    border: '1px solid rgba(0, 243, 255, 0.3)',
                     padding: 'min(15px, 3vw)',
                     boxShadow: isEnterPressed
-                        ? '0 0 100px rgba(0, 212, 255, 0.6), 0 0 150px rgba(124, 58, 237, 0.4)'
-                        : '0 20px 60px rgba(0, 0, 0, 0.5)',
+                        ? '0 0 100px rgba(0, 243, 255, 0.4), 0 0 150px rgba(255, 0, 255, 0.2)'
+                        : '0 20px 60px rgba(0, 0, 0, 0.8)',
                     transition: 'box-shadow 0.5s ease'
                 }}>
                     {/* Screen content */}
                     <div style={{
                         width: '100%',
                         height: '100%',
-                        background: '#0d1117',
-                        borderRadius: '8px',
+                        background: '#000',
+                        borderRadius: '2px',
                         padding: 'min(15px, 2.5vw)',
                         fontFamily: '"Fira Code", "SF Mono", "Consolas", monospace',
                         fontSize: 'clamp(8px, 2.5vw, 12px)',
                         lineHeight: '1.6',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        border: '1px solid #1a1a1a'
                     }}>
                         {/* Window controls */}
                         <div style={{
@@ -127,38 +137,40 @@ const IntroAnimation = ({ onComplete }) => {
                             gap: '8px',
                             marginBottom: '15px',
                             paddingBottom: '10px',
-                            borderBottom: '1px solid #21262d'
+                            borderBottom: '1px solid #1a1a1a'
                         }}>
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27ca3f' }} />
-                            <span style={{ marginLeft: '15px', color: '#8b949e', fontSize: '11px' }}>portfolio.js — VS Code</span>
+                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff0055' }} />
+                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ffea00' }} />
+                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00ff9d' }} />
+                            <span style={{ marginLeft: '15px', color: '#56697a', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>SYSTEM.INIT</span>
                         </div>
 
                         {/* Code */}
                         <pre style={{
                             margin: 0,
-                            color: '#e6e6e6',
+                            color: '#e0faff',
                             whiteSpace: 'pre-wrap',
-                            wordBreak: 'break-all'
+                            wordBreak: 'break-all',
+                            textShadow: '0 0 5px rgba(0, 243, 255, 0.3)'
                         }}>
                             <code>
                                 {typedCode.split('\n').map((line, i) => (
                                     <div key={i} style={{ minHeight: '18px' }}>
-                                        {line.includes('const') && <><span style={{ color: '#ff79c6' }}>const </span><span style={{ color: '#50fa7b' }}>{line.replace('const ', '')}</span></>}
-                                        {line.includes('name:') && <span><span style={{ color: '#8be9fd' }}>  name</span>: <span style={{ color: '#f1fa8c' }}>"{line.split('"')[1]}"</span>,</span>}
-                                        {line.includes('role:') && <span><span style={{ color: '#8be9fd' }}>  role</span>: <span style={{ color: '#f1fa8c' }}>"{line.split('"')[1]}"</span>,</span>}
-                                        {line.includes('skills:') && <span><span style={{ color: '#8be9fd' }}>  skills</span>: [<span style={{ color: '#f1fa8c' }}>"React", "Node.js", "MongoDB"</span>],</span>}
-                                        {line.includes('passion:') && <span><span style={{ color: '#8be9fd' }}>  passion</span>: <span style={{ color: '#f1fa8c' }}>"{line.split('"')[1]}"</span></span>}
-                                        {line === '};' && <span style={{ color: '#50fa7b' }}>{'};'}</span>}
+                                        {line.includes('const') && <><span style={{ color: '#ff00ff' }}>const </span><span style={{ color: '#00f3ff' }}>{line.replace('const ', '')}</span></>}
+                                        {line.includes('name:') && <span><span style={{ color: '#bc13fe' }}>  name</span>: <span style={{ color: '#ffea00' }}>"{line.split('"')[1]}"</span>,</span>}
+                                        {line.includes('role:') && <span><span style={{ color: '#bc13fe' }}>  role</span>: <span style={{ color: '#ffea00' }}>"{line.split('"')[1]}"</span>,</span>}
+                                        {line.includes('skills:') && <span><span style={{ color: '#bc13fe' }}>  skills</span>: [<span style={{ color: '#00ff9d' }}>"Flutter", "Vue.js", "MySQL"</span>],</span>}
+                                        {line.includes('passion:') && <span><span style={{ color: '#bc13fe' }}>  passion</span>: <span style={{ color: '#ffea00' }}>"{line.split('"')[1]}"</span></span>}
+                                        {line === '};' && <span style={{ color: '#00f3ff' }}>{'};'}</span>}
                                         {line === '' && <br />}
-                                        {line.includes('loadPortfolio') && <span style={{ color: '#bd93f9' }}>{line}</span>}
+                                        {line.includes('loadPortfolio') && <span style={{ color: '#ff00ff' }}>{line}</span>}
                                     </div>
                                 ))}
                                 {showCursor && <span style={{
-                                    background: '#00d4ff',
-                                    color: '#0d1117',
-                                    padding: '0 2px'
+                                    background: '#00f3ff',
+                                    color: '#000',
+                                    padding: '0 2px',
+                                    boxShadow: '0 0 10px #00f3ff'
                                 }}>|</span>}
                             </code>
                         </pre>
@@ -168,19 +180,22 @@ const IntroAnimation = ({ onComplete }) => {
                 {/* Laptop base */}
                 <div style={{
                     width: 'min(420px, 95vw)',
-                    height: '18px',
-                    background: 'linear-gradient(180deg, #4d4d6d 0%, #3d3d5c 50%, #2d2d44 100%)',
-                    borderRadius: '0 0 8px 8px',
-                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)'
+                    height: '12px',
+                    background: '#1a1a1a',
+                    borderRadius: '0 0 4px 4px',
+                    boxShadow: '0 0 20px rgba(0, 243, 255, 0.1)',
+                    border: '1px solid #333',
+                    borderTop: 'none'
                 }}>
                     {/* Trackpad notch */}
                     <div style={{
                         width: '80px',
-                        height: '4px',
-                        background: '#5d5d7d',
+                        height: '2px',
+                        background: '#00f3ff',
                         borderRadius: '2px',
                         margin: '0 auto',
-                        marginTop: '7px'
+                        marginTop: '0px',
+                        boxShadow: '0 0 10px #00f3ff'
                     }} />
                 </div>
             </div>
@@ -194,22 +209,24 @@ const IntroAnimation = ({ onComplete }) => {
                     padding: 'min(18px, 3vw) min(60px, 10vw)',
                     fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
                     fontWeight: '600',
-                    fontFamily: 'inherit',
+                    fontFamily: '"Space Grotesk", sans-serif',
+                    textTransform: 'uppercase',
+                    letterSpacing: '2px',
                     background: typedCode.length >= fullCode.length * 0.8
-                        ? 'linear-gradient(135deg, #00d4ff, #7c3aed)'
-                        : 'rgba(255,255,255,0.08)',
-                    color: typedCode.length >= fullCode.length * 0.8 ? '#0a0a0f' : 'rgba(255,255,255,0.3)',
-                    border: 'none',
-                    borderRadius: '50px',
+                        ? 'rgba(0, 243, 255, 0.1)'
+                        : 'rgba(255,255,255,0.02)',
+                    color: typedCode.length >= fullCode.length * 0.8 ? '#00f3ff' : 'rgba(255,255,255,0.2)',
+                    border: typedCode.length >= fullCode.length * 0.8 ? '1px solid #00f3ff' : '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '2px',
                     cursor: typedCode.length >= fullCode.length * 0.8 ? 'pointer' : 'not-allowed',
                     transition: 'all 0.3s ease',
                     transform: isEnterPressed ? 'scale(0.95)' : 'scale(1)',
                     boxShadow: typedCode.length >= fullCode.length * 0.8
-                        ? '0 0 50px rgba(0, 212, 255, 0.5)'
+                        ? '0 0 20px rgba(0, 243, 255, 0.2)'
                         : 'none'
                 }}
             >
-                {isEnterPressed ? '🚀 Launching...' : '⏎ Execute Code'}
+                {isEnterPressed ? '⚡ INITIALIZING...' : '> ENTER SYSTEM'}
             </button>
 
             {/* Skip button */}

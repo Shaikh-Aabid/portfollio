@@ -121,7 +121,7 @@ const Contact = () => {
                                         width: '44px',
                                         height: '44px',
                                         borderRadius: '12px',
-                                        background: 'rgba(0, 212, 255, 0.1)',
+                                        background: 'rgba(59, 130, 246, 0.1)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',

@@ -1,190 +1,436 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Float } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Float, Text, RoundedBox } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Interactive Robot Character
-function RobotCharacter() {
+// Floating Laptop with Code Screen
+function DeveloperLaptop() {
     const groupRef = useRef();
-    const headRef = useRef();
-    const leftEyeRef = useRef();
-    const rightEyeRef = useRef();
+    const screenRef = useRef();
+    const screenGlowRef = useRef();
     const { mouse, viewport } = useThree();
 
     useFrame((state) => {
+        const time = state.clock.elapsedTime;
+
         if (groupRef.current) {
-            // Body follows mouse with smooth lerp
-            const targetX = (mouse.x * viewport.width) / 4;
-            const targetY = (mouse.y * viewport.height) / 4;
+            // Follow mouse smoothly
+            const targetX = (mouse.x * viewport.width) / 6;
+            const targetY = (mouse.y * viewport.height) / 8;
 
             groupRef.current.rotation.y = THREE.MathUtils.lerp(
                 groupRef.current.rotation.y,
-                targetX * 0.3,
+                targetX * 0.3 - 0.2,
                 0.05
             );
             groupRef.current.rotation.x = THREE.MathUtils.lerp(
                 groupRef.current.rotation.x,
-                -targetY * 0.2,
+                -targetY * 0.15 + 0.1,
                 0.05
             );
 
-            // Floating animation (bobbing)
-            groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.5) * 0.15;
+            // Gentle floating
+            groupRef.current.position.y = Math.sin(time * 1.2) * 0.1;
         }
 
-        // Head looks at mouse more intensely
-        if (headRef.current) {
-            headRef.current.rotation.y = THREE.MathUtils.lerp(
-                headRef.current.rotation.y,
-                mouse.x * 0.5,
-                0.1
-            );
-            headRef.current.rotation.x = THREE.MathUtils.lerp(
-                headRef.current.rotation.x,
-                -mouse.y * 0.3,
-                0.1
-            );
+        // Screen glow pulsing
+        if (screenGlowRef.current) {
+            screenGlowRef.current.material.emissiveIntensity = 0.8 + Math.sin(time * 2) * 0.2;
         }
     });
 
     return (
-        <group ref={groupRef} position={[0, 0, 0]}>
-            {/* Body */}
-            <mesh position={[0, -0.3, 0]} castShadow>
-                <capsuleGeometry args={[0.6, 0.8, 8, 16]} />
+        <group ref={groupRef} position={[0, 0, 0]} scale={1.1}>
+            {/* Laptop Base */}
+            <RoundedBox args={[2.8, 0.12, 1.8]} radius={0.05} position={[0, -0.8, 0]}>
                 <meshStandardMaterial
-                    color="#E0E7FF"
+                    color="#1e293b"
                     metalness={0.8}
                     roughness={0.2}
                 />
-            </mesh>
+            </RoundedBox>
 
-            {/* Body glow ring */}
-            <mesh position={[0, -0.3, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[0.65, 0.03, 8, 32]} />
+            {/* Keyboard area */}
+            <mesh position={[0, -0.73, 0.1]}>
+                <boxGeometry args={[2.4, 0.02, 1.2]} />
                 <meshStandardMaterial
-                    color="#00d4ff"
-                    emissive="#00d4ff"
-                    emissiveIntensity={2}
+                    color="#0f172a"
+                    metalness={0.5}
+                    roughness={0.4}
                 />
             </mesh>
 
-            {/* Chest light */}
-            <mesh position={[0, -0.1, 0.55]}>
-                <circleGeometry args={[0.15, 32]} />
+            {/* Keyboard keys (simplified grid) */}
+            {[...Array(4)].map((_, row) =>
+                [...Array(10)].map((_, col) => (
+                    <mesh
+                        key={`key-${row}-${col}`}
+                        position={[-1 + col * 0.22, -0.71, -0.3 + row * 0.25]}
+                    >
+                        <boxGeometry args={[0.18, 0.02, 0.18]} />
+                        <meshStandardMaterial
+                            color="#334155"
+                            metalness={0.3}
+                            roughness={0.6}
+                        />
+                    </mesh>
+                ))
+            )}
+
+            {/* Trackpad */}
+            <mesh position={[0, -0.72, 0.55]}>
+                <boxGeometry args={[0.8, 0.01, 0.5]} />
                 <meshStandardMaterial
-                    color="#00d4ff"
-                    emissive="#00d4ff"
-                    emissiveIntensity={3}
+                    color="#475569"
+                    metalness={0.6}
+                    roughness={0.3}
                 />
             </mesh>
 
-            {/* Head */}
-            <group ref={headRef} position={[0, 0.9, 0]}>
-                {/* Main head */}
-                <mesh castShadow>
-                    <sphereGeometry args={[0.5, 32, 32]} />
+            {/* Screen Frame (lid) */}
+            <group position={[0, 0.15, -0.85]} rotation={[-0.3, 0, 0]}>
+                <RoundedBox args={[2.8, 1.9, 0.08]} radius={0.05}>
                     <meshStandardMaterial
-                        color="#CBD5E1"
+                        color="#1e293b"
+                        metalness={0.8}
+                        roughness={0.2}
+                    />
+                </RoundedBox>
+
+                {/* Screen Display */}
+                <mesh position={[0, 0, 0.045]} ref={screenRef}>
+                    <planeGeometry args={[2.5, 1.6]} />
+                    <meshStandardMaterial
+                        color="#0a0a0f"
+                        metalness={0.1}
+                        roughness={0.8}
+                    />
+                </mesh>
+
+                {/* Screen Glow */}
+                <mesh position={[0, 0, 0.046]} ref={screenGlowRef}>
+                    <planeGeometry args={[2.5, 1.6]} />
+                    <meshStandardMaterial
+                        color="#1e40af"
+                        emissive="#3b82f6"
+                        emissiveIntensity={0.8}
+                        transparent
+                        opacity={0.3}
+                    />
+                </mesh>
+
+                {/* Code Lines on Screen */}
+                {[...Array(8)].map((_, i) => (
+                    <mesh key={i} position={[-0.9, 0.55 - i * 0.18, 0.05]}>
+                        <boxGeometry args={[0.3 + Math.random() * 1.2, 0.06, 0.001]} />
+                        <meshStandardMaterial
+                            color={['#22d3ee', '#a78bfa', '#4ade80', '#fbbf24', '#f472b6'][i % 5]}
+                            emissive={['#22d3ee', '#a78bfa', '#4ade80', '#fbbf24', '#f472b6'][i % 5]}
+                            emissiveIntensity={1.5}
+                            transparent
+                            opacity={0.9}
+                        />
+                    </mesh>
+                ))}
+
+                {/* Cursor blink */}
+                <Float speed={8} rotationIntensity={0} floatIntensity={0.05}>
+                    <mesh position={[0.5, -0.35, 0.05]}>
+                        <boxGeometry args={[0.02, 0.12, 0.001]} />
+                        <meshStandardMaterial
+                            color="#ffffff"
+                            emissive="#ffffff"
+                            emissiveIntensity={2}
+                        />
+                    </mesh>
+                </Float>
+
+                {/* Apple-like logo on back */}
+                <mesh position={[0, 0, -0.045]}>
+                    <circleGeometry args={[0.15, 32]} />
+                    <meshStandardMaterial
+                        color="#64748b"
                         metalness={0.9}
                         roughness={0.1}
                     />
                 </mesh>
-
-                {/* Visor */}
-                <mesh position={[0, 0.05, 0.35]}>
-                    <boxGeometry args={[0.7, 0.25, 0.2]} />
-                    <meshStandardMaterial
-                        color="#0a0a0a"
-                        metalness={1}
-                        roughness={0}
-                    />
-                </mesh>
-
-                {/* Left Eye */}
-                <mesh ref={leftEyeRef} position={[-0.18, 0.05, 0.45]}>
-                    <sphereGeometry args={[0.08, 16, 16]} />
-                    <meshStandardMaterial
-                        color="#00d4ff"
-                        emissive="#00d4ff"
-                        emissiveIntensity={3}
-                    />
-                </mesh>
-
-                {/* Right Eye */}
-                <mesh ref={rightEyeRef} position={[0.18, 0.05, 0.45]}>
-                    <sphereGeometry args={[0.08, 16, 16]} />
-                    <meshStandardMaterial
-                        color="#00d4ff"
-                        emissive="#00d4ff"
-                        emissiveIntensity={3}
-                    />
-                </mesh>
-
-                {/* Antenna */}
-                <mesh position={[0, 0.55, 0]}>
-                    <cylinderGeometry args={[0.02, 0.02, 0.2, 8]} />
-                    <meshStandardMaterial color="#7c3aed" metalness={0.8} />
-                </mesh>
-                <mesh position={[0, 0.7, 0]}>
-                    <sphereGeometry args={[0.06, 16, 16]} />
-                    <meshStandardMaterial
-                        color="#7c3aed"
-                        emissive="#7c3aed"
-                        emissiveIntensity={2}
-                    />
-                </mesh>
-            </group>
-
-            {/* Left Arm */}
-            <group position={[-0.8, -0.2, 0]}>
-                <mesh rotation={[0, 0, 0.3]}>
-                    <capsuleGeometry args={[0.12, 0.5, 4, 8]} />
-                    <meshStandardMaterial color="#E0E7FF" metalness={0.8} roughness={0.2} />
-                </mesh>
-                {/* Hand */}
-                <mesh position={[-0.2, -0.4, 0]}>
-                    <sphereGeometry args={[0.15, 16, 16]} />
-                    <meshStandardMaterial color="#CBD5E1" metalness={0.9} roughness={0.1} />
-                </mesh>
-            </group>
-
-            {/* Right Arm */}
-            <group position={[0.8, -0.2, 0]}>
-                <mesh rotation={[0, 0, -0.3]}>
-                    <capsuleGeometry args={[0.12, 0.5, 4, 8]} />
-                    <meshStandardMaterial color="#E0E7FF" metalness={0.8} roughness={0.2} />
-                </mesh>
-                {/* Hand - waving */}
-                <Float speed={4} rotationIntensity={0.5} floatIntensity={0.2}>
-                    <mesh position={[0.2, -0.4, 0]}>
-                        <sphereGeometry args={[0.15, 16, 16]} />
-                        <meshStandardMaterial color="#CBD5E1" metalness={0.9} roughness={0.1} />
-                    </mesh>
-                </Float>
             </group>
         </group>
     );
 }
 
-// Particle background
-function ParticleField() {
-    const count = 80;
+// Single Tech Logo Label Component
+function TechLabel({ position, name, color, glowColor, speed = 2 }) {
+    const meshRef = useRef();
+    const groupRef = useRef();
+    
+    useFrame((state) => {
+        if (meshRef.current) {
+            // Subtle pulse
+            const pulse = Math.sin(state.clock.elapsedTime * 2) * 0.05 + 1;
+            meshRef.current.scale.set(pulse, pulse, 1);
+        }
+        // Face camera
+        if (groupRef.current) {
+            groupRef.current.lookAt(state.camera.position);
+        }
+    });
+
+    return (
+        <Float speed={speed} rotationIntensity={0.15} floatIntensity={0.35}>
+            <group ref={groupRef} position={position}>
+                {/* Background glow circle */}
+                <mesh position={[0, 0, -0.03]}>
+                    <circleGeometry args={[0.45, 32]} />
+                    <meshStandardMaterial
+                        color={color}
+                        emissive={glowColor}
+                        emissiveIntensity={1.5}
+                        transparent
+                        opacity={0.25}
+                    />
+                </mesh>
+                {/* Icon circle with color */}
+                <mesh ref={meshRef}>
+                    <circleGeometry args={[0.35, 32]} />
+                    <meshStandardMaterial
+                        color={color}
+                        emissive={glowColor}
+                        emissiveIntensity={2}
+                        metalness={0.7}
+                        roughness={0.2}
+                    />
+                </mesh>
+                {/* Framework initial/symbol */}
+                <Text
+                    position={[0, 0, 0.02]}
+                    fontSize={0.25}
+                    color="#ffffff"
+                    anchorX="center"
+                    anchorY="middle"
+                >
+                    {name.charAt(0)}
+                </Text>
+                {/* Framework name below */}
+                <Text
+                    position={[0, -0.52, 0]}
+                    fontSize={0.1}
+                    color={glowColor}
+                    anchorX="center"
+                    anchorY="middle"
+                >
+                    {name}
+                </Text>
+                {/* Glow light */}
+                <pointLight color={glowColor} intensity={3} distance={2.5} />
+            </group>
+        </Float>
+    );
+}
+
+// Floating Tech Logos - Flutter, Laravel, Vuetify, Vue.js
+function FloatingTechLogos() {
+    const groupRef = useRef();
+
+    useFrame((state) => {
+        const time = state.clock.elapsedTime;
+        if (groupRef.current) {
+            // Slow orbit
+            groupRef.current.rotation.y = time * 0.06;
+        }
+    });
+
+    const techStack = [
+        { name: 'Flutter', position: [2.3, 0.8, 0], color: '#02569B', glowColor: '#54C5F8', speed: 2 },
+        { name: 'Laravel', position: [-2.3, 0.5, 0.4], color: '#FF2D20', glowColor: '#FF6B5B', speed: 1.8 },
+        { name: 'Vuetify', position: [2, -0.8, 0.6], color: '#1867C0', glowColor: '#5CBBF6', speed: 2.2 },
+        { name: 'Vue', position: [-1.8, 1, -0.2], color: '#42B883', glowColor: '#42B883', speed: 1.9 },
+    ];
+
+    return (
+        <group ref={groupRef}>
+            {techStack.map((tech, index) => (
+                <TechLabel
+                    key={index}
+                    position={tech.position}
+                    name={tech.name}
+                    color={tech.color}
+                    glowColor={tech.glowColor}
+                    speed={tech.speed}
+                />
+            ))}
+        </group>
+    );
+}
+
+// Premium Code Brackets < /> - Beautiful 3D Design
+function CodeBrackets() {
+    const leftBracketRef = useRef();
+    const rightBracketRef = useRef();
+
+    useFrame((state) => {
+        const time = state.clock.elapsedTime;
+        
+        // Elegant floating motion
+        if (leftBracketRef.current) {
+            leftBracketRef.current.position.y = Math.sin(time * 0.7) * 0.08;
+            leftBracketRef.current.rotation.z = Math.sin(time * 0.3) * 0.03;
+            leftBracketRef.current.rotation.y = Math.sin(time * 0.4) * 0.1;
+        }
+        
+        if (rightBracketRef.current) {
+            rightBracketRef.current.position.y = Math.sin(time * 0.7 + 1) * 0.08;
+            rightBracketRef.current.rotation.z = Math.sin(time * 0.3 + Math.PI) * 0.03;
+            rightBracketRef.current.rotation.y = Math.sin(time * 0.4 + Math.PI) * 0.1;
+        }
+    });
+
+    return (
+        <>
+            {/* ========== LEFT BRACKET < ========== */}
+            <Float speed={1.2} rotationIntensity={0.05} floatIntensity={0.15}>
+                <group ref={leftBracketRef} position={[-2.6, -0.2, 1]} scale={0.9}>
+                    {/* Upper arm */}
+                    <mesh rotation={[0, 0, Math.PI / 4]} position={[0.15, 0.28, 0]}>
+                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
+                        <meshStandardMaterial
+                            color="#22d3ee"
+                            emissive="#0891b2"
+                            emissiveIntensity={2}
+                            metalness={0.8}
+                            roughness={0.1}
+                            transparent
+                            opacity={0.95}
+                        />
+                    </mesh>
+                    {/* Lower arm */}
+                    <mesh rotation={[0, 0, -Math.PI / 4]} position={[0.15, -0.28, 0]}>
+                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
+                        <meshStandardMaterial
+                            color="#06b6d4"
+                            emissive="#22d3ee"
+                            emissiveIntensity={2}
+                            metalness={0.8}
+                            roughness={0.1}
+                            transparent
+                            opacity={0.95}
+                        />
+                    </mesh>
+                    {/* Joint sphere */}
+                    <mesh position={[0, 0, 0]}>
+                        <sphereGeometry args={[0.08, 20, 20]} />
+                        <meshStandardMaterial
+                            color="#ffffff"
+                            emissive="#22d3ee"
+                            emissiveIntensity={3}
+                            metalness={0.9}
+                            roughness={0.05}
+                        />
+                    </mesh>
+                    {/* Intense glow */}
+                    <pointLight color="#22d3ee" intensity={4} distance={4} />
+                </group>
+            </Float>
+
+            {/* ========== RIGHT BRACKET /> ========== */}
+            <Float speed={1.2} rotationIntensity={0.05} floatIntensity={0.15}>
+                <group ref={rightBracketRef} position={[2.6, -0.2, 1]} scale={0.9}>
+                    {/* Slash / */}
+                    <mesh rotation={[0, 0, Math.PI / 5.5]} position={[-0.42, 0, 0]}>
+                        <capsuleGeometry args={[0.045, 0.65, 12, 20]} />
+                        <meshStandardMaterial
+                            color="#fbbf24"
+                            emissive="#f59e0b"
+                            emissiveIntensity={2.5}
+                            metalness={0.7}
+                            roughness={0.15}
+                            transparent
+                            opacity={0.95}
+                        />
+                    </mesh>
+                    {/* Upper arm of > */}
+                    <mesh rotation={[0, 0, -Math.PI / 4]} position={[-0.05, 0.28, 0]}>
+                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
+                        <meshStandardMaterial
+                            color="#a78bfa"
+                            emissive="#8b5cf6"
+                            emissiveIntensity={2}
+                            metalness={0.8}
+                            roughness={0.1}
+                            transparent
+                            opacity={0.95}
+                        />
+                    </mesh>
+                    {/* Lower arm of > */}
+                    <mesh rotation={[0, 0, Math.PI / 4]} position={[-0.05, -0.28, 0]}>
+                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
+                        <meshStandardMaterial
+                            color="#c084fc"
+                            emissive="#a78bfa"
+                            emissiveIntensity={2}
+                            metalness={0.8}
+                            roughness={0.1}
+                            transparent
+                            opacity={0.95}
+                        />
+                    </mesh>
+                    {/* Joint sphere for > */}
+                    <mesh position={[0.12, 0, 0]}>
+                        <sphereGeometry args={[0.08, 20, 20]} />
+                        <meshStandardMaterial
+                            color="#ffffff"
+                            emissive="#a78bfa"
+                            emissiveIntensity={3}
+                            metalness={0.9}
+                            roughness={0.05}
+                        />
+                    </mesh>
+                    {/* Glow lights */}
+                    <pointLight color="#a78bfa" intensity={4} distance={4} />
+                    <pointLight color="#fbbf24" intensity={2} distance={2.5} position={[-0.42, 0, 0]} />
+                </group>
+            </Float>
+        </>
+    );
+}
+
+// Enhanced Particle Field - Data Flow
+function DataParticles() {
+    const count = 150;
     const positions = useMemo(() => {
         const pos = new Float32Array(count * 3);
         for (let i = 0; i < count * 3; i += 3) {
-            pos[i] = (Math.random() - 0.5) * 12;
-            pos[i + 1] = (Math.random() - 0.5) * 12;
-            pos[i + 2] = (Math.random() - 0.5) * 12;
+            pos[i] = (Math.random() - 0.5) * 15;
+            pos[i + 1] = (Math.random() - 0.5) * 15;
+            pos[i + 2] = (Math.random() - 0.5) * 15;
         }
         return pos;
+    }, []);
+
+    const colors = useMemo(() => {
+        const cols = new Float32Array(count * 3);
+        const colorPalette = [
+            [0.13, 0.83, 0.93],    // Cyan
+            [0.65, 0.55, 0.98],    // Purple
+            [0.29, 0.87, 0.50],    // Green
+            [0.22, 0.52, 0.96],    // Blue
+            [0.98, 0.75, 0.14],    // Yellow
+        ];
+        for (let i = 0; i < count; i++) {
+            const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+            cols[i * 3] = color[0];
+            cols[i * 3 + 1] = color[1];
+            cols[i * 3 + 2] = color[2];
+        }
+        return cols;
     }, []);
 
     const pointsRef = useRef();
 
     useFrame((state) => {
         if (pointsRef.current) {
-            pointsRef.current.rotation.y = state.clock.elapsedTime * 0.02;
+            pointsRef.current.rotation.y = state.clock.elapsedTime * 0.03;
+            pointsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.05) * 0.1;
         }
     });
 
@@ -197,15 +443,62 @@ function ParticleField() {
                     array={positions}
                     itemSize={3}
                 />
+                <bufferAttribute
+                    attach="attributes-color"
+                    count={count}
+                    array={colors}
+                    itemSize={3}
+                />
             </bufferGeometry>
             <pointsMaterial
-                size={0.04}
-                color="#00d4ff"
+                size={0.05}
+                vertexColors
                 transparent
-                opacity={0.5}
+                opacity={0.7}
                 sizeAttenuation
             />
         </points>
+    );
+}
+
+// Connection lines between elements
+function ConnectionLines() {
+    const linesRef = useRef();
+
+    useFrame((state) => {
+        if (linesRef.current) {
+            linesRef.current.rotation.z = state.clock.elapsedTime * 0.05;
+        }
+    });
+
+    const linePositions = useMemo(() => {
+        const positions = [];
+        for (let i = 0; i < 6; i++) {
+            const angle = (i / 6) * Math.PI * 2;
+            const startRadius = 1.5;
+            const endRadius = 2.5;
+            positions.push(
+                Math.cos(angle) * startRadius, Math.sin(angle) * 0.5, Math.sin(angle) * startRadius,
+                Math.cos(angle) * endRadius, Math.sin(angle) * 0.5, Math.sin(angle) * endRadius
+            );
+        }
+        return new Float32Array(positions);
+    }, []);
+
+    return (
+        <group ref={linesRef}>
+            <lineSegments>
+                <bufferGeometry>
+                    <bufferAttribute
+                        attach="attributes-position"
+                        count={12}
+                        array={linePositions}
+                        itemSize={3}
+                    />
+                </bufferGeometry>
+                <lineBasicMaterial color="#3b82f6" transparent opacity={0.3} />
+            </lineSegments>
+        </group>
     );
 }
 
@@ -225,23 +518,35 @@ export default function ThreeScene() {
                 gl={{ antialias: true, alpha: true }}
                 onCreated={(state) => state.gl.setClearColor(0x000000, 0)}
             >
-                <PerspectiveCamera makeDefault position={[0, 0.5, 5]} fov={50} />
+                <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
 
-                {/* Lighting */}
-                <ambientLight intensity={0.3} />
+                {/* Ambient Lighting */}
+                <ambientLight intensity={0.4} />
+                
+                {/* Key Lights */}
                 <directionalLight
                     position={[5, 5, 5]}
-                    intensity={1.5}
+                    intensity={1.2}
                     castShadow
                     color="#ffffff"
                 />
-                <pointLight position={[-3, 2, 2]} intensity={1} color="#00d4ff" />
-                <pointLight position={[3, 2, 2]} intensity={0.8} color="#7c3aed" />
-                <pointLight position={[0, -2, 3]} intensity={0.5} color="#f472b6" />
+                <directionalLight
+                    position={[-3, 3, -3]}
+                    intensity={0.8}
+                    color="#a78bfa"
+                />
+                
+                {/* Accent Point Lights */}
+                <pointLight position={[-3, 2, 2]} intensity={1.5} color="#22d3ee" />
+                <pointLight position={[3, 2, 2]} intensity={1.5} color="#a78bfa" />
+                <pointLight position={[0, -2, 3]} intensity={1} color="#3b82f6" />
 
-                {/* Scene elements */}
-                <RobotCharacter />
-                <ParticleField />
+                {/* Scene Elements */}
+                <DeveloperLaptop />
+                <FloatingTechLogos />
+                <CodeBrackets />
+                <DataParticles />
+                <ConnectionLines />
 
                 <OrbitControls
                     enableZoom={false}
@@ -257,9 +562,10 @@ export default function ThreeScene() {
                 transform: 'translateX(-50%)',
                 fontSize: '0.75rem',
                 color: 'rgba(255,255,255,0.4)',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                letterSpacing: '1px'
             }}>
-                Move your mouse to interact ✨
+                Move your mouse to interact 💻
             </div>
         </div>
     );
