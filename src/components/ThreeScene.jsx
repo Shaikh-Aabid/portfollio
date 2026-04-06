@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Float, Text, RoundedBox } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Float, Text, RoundedBox, useTexture, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Floating Laptop with Code Screen
@@ -20,17 +20,18 @@ function DeveloperLaptop() {
 
             groupRef.current.rotation.y = THREE.MathUtils.lerp(
                 groupRef.current.rotation.y,
-                targetX * 0.3 - 0.2,
-                0.05
+                targetX * 0.25 - 0.2, // Smoother rotation range
+                0.04                  // Lower lerp for ultimate smoothness
             );
             groupRef.current.rotation.x = THREE.MathUtils.lerp(
                 groupRef.current.rotation.x,
-                -targetY * 0.15 + 0.1,
-                0.05
+                -targetY * 0.12 + 0.1, // Smoother tilting range
+                0.04                   // Lower lerp for ultimate smoothness
             );
 
-            // Gentle floating
-            groupRef.current.position.y = Math.sin(time * 1.2) * 0.1;
+            // High-Performance Gentle floating
+            groupRef.current.position.y = Math.sin(time * 0.8) * 0.15;
+            groupRef.current.position.x = Math.cos(time * 0.5) * 0.05;
         }
 
         // Screen glow pulsing
@@ -40,13 +41,15 @@ function DeveloperLaptop() {
     });
 
     return (
-        <group ref={groupRef} position={[0, 0, 0]} scale={1.1}>
+        <group ref={groupRef} position={[0, 0, 0]} scale={0.9}>
             {/* Laptop Base */}
             <RoundedBox args={[2.8, 0.12, 1.8]} radius={0.05} position={[0, -0.8, 0]}>
-                <meshStandardMaterial
+                <meshPhysicalMaterial
                     color="#1e293b"
-                    metalness={0.8}
-                    roughness={0.2}
+                    metalness={0.9}
+                    roughness={0.1}
+                    clearcoat={1}
+                    clearcoatRoughness={0.1}
                 />
             </RoundedBox>
 
@@ -90,10 +93,13 @@ function DeveloperLaptop() {
             {/* Screen Frame (lid) */}
             <group position={[0, 0.15, -0.85]} rotation={[-0.3, 0, 0]}>
                 <RoundedBox args={[2.8, 1.9, 0.08]} radius={0.05}>
-                    <meshStandardMaterial
-                        color="#1e293b"
-                        metalness={0.8}
-                        roughness={0.2}
+                    <meshPhysicalMaterial
+                        color="#0f172a"
+                        metalness={0.95}
+                        roughness={0.05}
+                        clearcoat={1}
+                        clearcoatRoughness={0.05}
+                        reflectivity={1}
                     />
                 </RoundedBox>
 
@@ -111,8 +117,8 @@ function DeveloperLaptop() {
                 <mesh position={[0, 0, 0.046]} ref={screenGlowRef}>
                     <planeGeometry args={[2.5, 1.6]} />
                     <meshStandardMaterial
-                        color="#1e40af"
-                        emissive="#3b82f6"
+                        color="#0a0118"
+                        emissive="#00f5ff"
                         emissiveIntensity={0.8}
                         transparent
                         opacity={0.3}
@@ -124,8 +130,8 @@ function DeveloperLaptop() {
                     <mesh key={i} position={[-0.9, 0.55 - i * 0.18, 0.05]}>
                         <boxGeometry args={[0.3 + Math.random() * 1.2, 0.06, 0.001]} />
                         <meshStandardMaterial
-                            color={['#22d3ee', '#a78bfa', '#4ade80', '#fbbf24', '#f472b6'][i % 5]}
-                            emissive={['#22d3ee', '#a78bfa', '#4ade80', '#fbbf24', '#f472b6'][i % 5]}
+                            color={['#00f5ff', '#ff00ea', '#00ff88', '#bf5af2', '#ffaa00'][i % 5]}
+                            emissive={['#00f5ff', '#ff00ea', '#00ff88', '#bf5af2', '#ffaa00'][i % 5]}
                             emissiveIntensity={1.5}
                             transparent
                             opacity={0.9}
@@ -159,15 +165,19 @@ function DeveloperLaptop() {
     );
 }
 
-// Single Tech Logo Label Component
-function TechLabel({ position, name, color, glowColor, speed = 2 }) {
+// Single Tech Logo Component with actual image textures
+function TechLogo({ position, name, glowColor, logoPath, speed = 2 }) {
     const meshRef = useRef();
     const groupRef = useRef();
+    const texture = useTexture(logoPath);
+    
+    // Configure texture for transparent PNGs
+    texture.colorSpace = THREE.SRGBColorSpace;
     
     useFrame((state) => {
         if (meshRef.current) {
             // Subtle pulse
-            const pulse = Math.sin(state.clock.elapsedTime * 2) * 0.05 + 1;
+            const pulse = Math.sin(state.clock.elapsedTime * 2) * 0.03 + 1;
             meshRef.current.scale.set(pulse, pulse, 1);
         }
         // Face camera
@@ -177,43 +187,40 @@ function TechLabel({ position, name, color, glowColor, speed = 2 }) {
     });
 
     return (
-        <Float speed={speed} rotationIntensity={0.15} floatIntensity={0.35}>
+        <Float speed={speed} rotationIntensity={0.1} floatIntensity={0.3}>
             <group ref={groupRef} position={position}>
-                {/* Background glow circle */}
-                <mesh position={[0, 0, -0.03]}>
-                    <circleGeometry args={[0.45, 32]} />
+                {/* Glow background */}
+                <mesh position={[0, 0, -0.02]}>
+                    <circleGeometry args={[0.5, 32]} />
                     <meshStandardMaterial
-                        color={color}
+                        color={glowColor}
                         emissive={glowColor}
-                        emissiveIntensity={1.5}
+                        emissiveIntensity={0.8}
                         transparent
-                        opacity={0.25}
+                        opacity={0.15}
                     />
                 </mesh>
-                {/* Icon circle with color */}
-                <mesh ref={meshRef}>
-                    <circleGeometry args={[0.35, 32]} />
+                {/* Dark circular background */}
+                <mesh position={[0, 0, -0.01]}>
+                    <circleGeometry args={[0.42, 32]} />
                     <meshStandardMaterial
-                        color={color}
-                        emissive={glowColor}
-                        emissiveIntensity={2}
-                        metalness={0.7}
-                        roughness={0.2}
+                        color="#0a0a15"
+                        metalness={0.5}
+                        roughness={0.3}
                     />
                 </mesh>
-                {/* Framework initial/symbol */}
+                {/* Logo image on plane */}
+                <mesh ref={meshRef}>
+                    <planeGeometry args={[0.6, 0.6]} />
+                    <meshBasicMaterial 
+                        map={texture} 
+                        transparent 
+                        side={THREE.DoubleSide}
+                    />
+                </mesh>
+                {/* Tech name below */}
                 <Text
-                    position={[0, 0, 0.02]}
-                    fontSize={0.25}
-                    color="#ffffff"
-                    anchorX="center"
-                    anchorY="middle"
-                >
-                    {name.charAt(0)}
-                </Text>
-                {/* Framework name below */}
-                <Text
-                    position={[0, -0.52, 0]}
+                    position={[0, -0.55, 0]}
                     fontSize={0.1}
                     color={glowColor}
                     anchorX="center"
@@ -222,177 +229,65 @@ function TechLabel({ position, name, color, glowColor, speed = 2 }) {
                     {name}
                 </Text>
                 {/* Glow light */}
-                <pointLight color={glowColor} intensity={3} distance={2.5} />
+                <pointLight color={glowColor} intensity={1.5} distance={1.5} />
             </group>
         </Float>
     );
 }
 
-// Floating Tech Logos - Flutter, Laravel, Vuetify, Vue.js
+
+
+// Orbiting Tech Icons around the Laptop
 function FloatingTechLogos() {
     const groupRef = useRef();
+    const renderOrbitRadius = 2.2; // Spaced out for elegant Negative Space
+    const orbitHeight = 0; // Same height as laptop center
 
     useFrame((state) => {
         const time = state.clock.elapsedTime;
         if (groupRef.current) {
-            // Slow orbit
-            groupRef.current.rotation.y = time * 0.06;
+            // Smooth continuous rotation around the laptop
+            groupRef.current.rotation.y = time * 0.15;
         }
     });
 
+    const basePath = import.meta.env.BASE_URL;
     const techStack = [
-        { name: 'Flutter', position: [2.3, 0.8, 0], color: '#02569B', glowColor: '#54C5F8', speed: 2 },
-        { name: 'Laravel', position: [-2.3, 0.5, 0.4], color: '#FF2D20', glowColor: '#FF6B5B', speed: 1.8 },
-        { name: 'Vuetify', position: [2, -0.8, 0.6], color: '#1867C0', glowColor: '#5CBBF6', speed: 2.2 },
-        { name: 'Vue', position: [-1.8, 1, -0.2], color: '#42B883', glowColor: '#42B883', speed: 1.9 },
+        { name: 'Flutter', glowColor: '#54C5F8', logoPath: `${basePath}logos/flutter.png` },
+        { name: 'Laravel', glowColor: '#FF6B5B', logoPath: `${basePath}logos/laravel.png` },
+        { name: 'Vue', glowColor: '#42B883', logoPath: `${basePath}logos/vue.png` },
+        { name: 'Vuetify', glowColor: '#5CBBF6', logoPath: `${basePath}logos/vuetify.png` },
+        { name: 'React', glowColor: '#61DAFB', logoPath: `${basePath}logos/react.png` },
+        { name: 'MySQL', glowColor: '#5CBBF6', logoPath: `${basePath}logos/mysql.png` },
     ];
 
+    // Calculate positions in a circle
+    const getPosition = (index, total) => {
+        const angle = (index / total) * Math.PI * 2;
+        return [
+            Math.cos(angle) * renderOrbitRadius,
+            orbitHeight + Math.sin(index * 0.5) * 0.3, // Slight vertical variation
+            Math.sin(angle) * renderOrbitRadius
+        ];
+    };
+
     return (
-        <group ref={groupRef}>
+        <group ref={groupRef} position={[0, -0.2, 0]}>
             {techStack.map((tech, index) => (
-                <TechLabel
+                <TechLogo
                     key={index}
-                    position={tech.position}
+                    position={getPosition(index, techStack.length)}
                     name={tech.name}
-                    color={tech.color}
                     glowColor={tech.glowColor}
-                    speed={tech.speed}
+                    logoPath={tech.logoPath}
+                    speed={1.5 + index * 0.1}
                 />
             ))}
         </group>
     );
 }
 
-// Premium Code Brackets < /> - Beautiful 3D Design
-function CodeBrackets() {
-    const leftBracketRef = useRef();
-    const rightBracketRef = useRef();
 
-    useFrame((state) => {
-        const time = state.clock.elapsedTime;
-        
-        // Elegant floating motion
-        if (leftBracketRef.current) {
-            leftBracketRef.current.position.y = Math.sin(time * 0.7) * 0.08;
-            leftBracketRef.current.rotation.z = Math.sin(time * 0.3) * 0.03;
-            leftBracketRef.current.rotation.y = Math.sin(time * 0.4) * 0.1;
-        }
-        
-        if (rightBracketRef.current) {
-            rightBracketRef.current.position.y = Math.sin(time * 0.7 + 1) * 0.08;
-            rightBracketRef.current.rotation.z = Math.sin(time * 0.3 + Math.PI) * 0.03;
-            rightBracketRef.current.rotation.y = Math.sin(time * 0.4 + Math.PI) * 0.1;
-        }
-    });
-
-    return (
-        <>
-            {/* ========== LEFT BRACKET < ========== */}
-            <Float speed={1.2} rotationIntensity={0.05} floatIntensity={0.15}>
-                <group ref={leftBracketRef} position={[-2.6, -0.2, 1]} scale={0.9}>
-                    {/* Upper arm */}
-                    <mesh rotation={[0, 0, Math.PI / 4]} position={[0.15, 0.28, 0]}>
-                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
-                        <meshStandardMaterial
-                            color="#22d3ee"
-                            emissive="#0891b2"
-                            emissiveIntensity={2}
-                            metalness={0.8}
-                            roughness={0.1}
-                            transparent
-                            opacity={0.95}
-                        />
-                    </mesh>
-                    {/* Lower arm */}
-                    <mesh rotation={[0, 0, -Math.PI / 4]} position={[0.15, -0.28, 0]}>
-                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
-                        <meshStandardMaterial
-                            color="#06b6d4"
-                            emissive="#22d3ee"
-                            emissiveIntensity={2}
-                            metalness={0.8}
-                            roughness={0.1}
-                            transparent
-                            opacity={0.95}
-                        />
-                    </mesh>
-                    {/* Joint sphere */}
-                    <mesh position={[0, 0, 0]}>
-                        <sphereGeometry args={[0.08, 20, 20]} />
-                        <meshStandardMaterial
-                            color="#ffffff"
-                            emissive="#22d3ee"
-                            emissiveIntensity={3}
-                            metalness={0.9}
-                            roughness={0.05}
-                        />
-                    </mesh>
-                    {/* Intense glow */}
-                    <pointLight color="#22d3ee" intensity={4} distance={4} />
-                </group>
-            </Float>
-
-            {/* ========== RIGHT BRACKET /> ========== */}
-            <Float speed={1.2} rotationIntensity={0.05} floatIntensity={0.15}>
-                <group ref={rightBracketRef} position={[2.6, -0.2, 1]} scale={0.9}>
-                    {/* Slash / */}
-                    <mesh rotation={[0, 0, Math.PI / 5.5]} position={[-0.42, 0, 0]}>
-                        <capsuleGeometry args={[0.045, 0.65, 12, 20]} />
-                        <meshStandardMaterial
-                            color="#fbbf24"
-                            emissive="#f59e0b"
-                            emissiveIntensity={2.5}
-                            metalness={0.7}
-                            roughness={0.15}
-                            transparent
-                            opacity={0.95}
-                        />
-                    </mesh>
-                    {/* Upper arm of > */}
-                    <mesh rotation={[0, 0, -Math.PI / 4]} position={[-0.05, 0.28, 0]}>
-                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
-                        <meshStandardMaterial
-                            color="#a78bfa"
-                            emissive="#8b5cf6"
-                            emissiveIntensity={2}
-                            metalness={0.8}
-                            roughness={0.1}
-                            transparent
-                            opacity={0.95}
-                        />
-                    </mesh>
-                    {/* Lower arm of > */}
-                    <mesh rotation={[0, 0, Math.PI / 4]} position={[-0.05, -0.28, 0]}>
-                        <capsuleGeometry args={[0.055, 0.5, 12, 20]} />
-                        <meshStandardMaterial
-                            color="#c084fc"
-                            emissive="#a78bfa"
-                            emissiveIntensity={2}
-                            metalness={0.8}
-                            roughness={0.1}
-                            transparent
-                            opacity={0.95}
-                        />
-                    </mesh>
-                    {/* Joint sphere for > */}
-                    <mesh position={[0.12, 0, 0]}>
-                        <sphereGeometry args={[0.08, 20, 20]} />
-                        <meshStandardMaterial
-                            color="#ffffff"
-                            emissive="#a78bfa"
-                            emissiveIntensity={3}
-                            metalness={0.9}
-                            roughness={0.05}
-                        />
-                    </mesh>
-                    {/* Glow lights */}
-                    <pointLight color="#a78bfa" intensity={4} distance={4} />
-                    <pointLight color="#fbbf24" intensity={2} distance={2.5} position={[-0.42, 0, 0]} />
-                </group>
-            </Float>
-        </>
-    );
-}
 
 // Enhanced Particle Field - Data Flow
 function DataParticles() {
@@ -518,7 +413,7 @@ export default function ThreeScene() {
                 gl={{ antialias: true, alpha: true }}
                 onCreated={(state) => state.gl.setClearColor(0x000000, 0)}
             >
-                <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
+                <PerspectiveCamera makeDefault position={[0, 0, 6.5]} fov={45} />
 
                 {/* Ambient Lighting */}
                 <ambientLight intensity={0.4} />
@@ -542,11 +437,21 @@ export default function ThreeScene() {
                 <pointLight position={[0, -2, 3]} intensity={1} color="#3b82f6" />
 
                 {/* Scene Elements */}
-                <DeveloperLaptop />
-                <FloatingTechLogos />
-                <CodeBrackets />
-                <DataParticles />
-                <ConnectionLines />
+                <group position={[0, 0.5, 0]}>
+                    <DeveloperLaptop />
+                    <FloatingTechLogos />
+                    <ConnectionLines />
+                </group>
+
+                <ContactShadows
+                    position={[0, -2.5, 0]}
+                    opacity={0.4}
+                    scale={15}
+                    blur={2.5}
+                    far={4}
+                />
+
+                <Environment preset="city" />
 
                 <OrbitControls
                     enableZoom={false}

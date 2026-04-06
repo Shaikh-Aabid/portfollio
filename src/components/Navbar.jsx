@@ -24,37 +24,41 @@ const Navbar = () => {
 
     return (
         <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-            <div className="container" style={{
+            <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                width: '100%'
             }}>
                 <a href="#home" className="logo">
-                    &lt;Aabid /&gt;
+                    <span>{'<Aabid />'}</span>
                 </a>
 
                 {/* Desktop Menu */}
-                <div className="desktop-menu" style={{ display: 'flex', gap: '2.5rem' }}>
+                <div className="desktop-menu" style={{ 
+                    display: 'flex', 
+                    gap: '2rem',
+                    alignItems: 'center'
+                }}>
                     {navLinks.map((link) => (
                         <a key={link.name} href={link.href}>
                             {link.name}
                         </a>
                     ))}
+                    <a href="#contact" className="soft-btn primary" style={{
+                        padding: '10px 20px',
+                        fontSize: '0.85rem',
+                        marginLeft: '0.5rem'
+                    }}>
+                        Let's Talk
+                    </a>
                 </div>
-
-                {/* CTA Button */}
-                <a href="#contact" className="soft-btn primary desktop-menu" style={{
-                    padding: '10px 24px',
-                    fontSize: '0.9rem'
-                }}>
-                    Let's Talk
-                </a>
 
                 {/* Mobile Toggle */}
                 <div className="mobile-toggle" onClick={toggleMenu} style={{
                     display: 'none',
                     cursor: 'pointer',
-                    fontSize: '1.5rem',
+                    fontSize: '1.3rem',
                     color: 'var(--text-main)',
                     padding: '8px',
                     borderRadius: '8px',
@@ -65,33 +69,51 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu */}
-            <div className="mobile-menu" style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                width: '100%',
-                padding: '1.5rem',
-                display: isOpen ? 'flex' : 'none',
-                flexDirection: 'column',
-                gap: '0.5rem',
-                alignItems: 'center'
-            }}>
-                {navLinks.map((link) => (
-                    <a key={link.name} href={link.href} onClick={toggleMenu}>
-                        {link.name}
-                    </a>
-                ))}
-                <a href="#contact" className="soft-btn primary" onClick={toggleMenu} style={{
-                    marginTop: '1rem',
-                    width: '100%',
-                    maxWidth: '200px'
+            {isOpen && (
+                <div className="mobile-menu" style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    left: '0',
+                    right: '0',
+                    padding: '1rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.25rem',
+                    background: 'rgba(10, 1, 24, 0.95)',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(255,255,255,0.1)'
                 }}>
-                    Let's Talk
-                </a>
-            </div>
+                    {navLinks.map((link) => (
+                        <a 
+                            key={link.name} 
+                            href={link.href} 
+                            onClick={toggleMenu}
+                            style={{
+                                padding: '12px 16px',
+                                borderRadius: '8px',
+                                transition: 'background 0.2s ease'
+                            }}
+                        >
+                            {link.name}
+                        </a>
+                    ))}
+                    <a 
+                        href="#contact" 
+                        className="soft-btn primary" 
+                        onClick={toggleMenu} 
+                        style={{
+                            marginTop: '0.5rem',
+                            textAlign: 'center'
+                        }}
+                    >
+                        Let's Talk
+                    </a>
+                </div>
+            )}
 
             <style>{`
-                @media (max-width: 900px) {
+                @media (max-width: 768px) {
                     .desktop-menu { display: none !important; }
                     .mobile-toggle { display: block !important; }
                 }

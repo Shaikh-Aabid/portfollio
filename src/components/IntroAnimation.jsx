@@ -1,271 +1,207 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const IntroAnimation = ({ onComplete }) => {
     const [typedCode, setTypedCode] = useState('');
-    const [showCursor, setShowCursor] = useState(true);
     const [isEnterPressed, setIsEnterPressed] = useState(false);
-    const [isExiting, setIsExiting] = useState(false);
 
-    const codeLines = useMemo(() => [
-        'const developer = {',
-        '  name: "Aabid Hussain Shaikh",',
-        '  role: "Full Stack Developer",',
-        '  skills: ["Flutter", "Vue.js", "MySQL"],',
-        '  passion: "Building amazing experiences"',
-        '};',
+    const logLines = useMemo(() => [
+        '> INITIALIZING_AURORA_KERNEL_V4.2...',
+        '> IDENTITY: AABID HUSSAIN SHAIKH',
+        '> ROLE: FULL STACK ARCHITECT',
+        '> TECH_STACK: REACT, VUE, LARAVEL, FLUTTER',
+        '> LOADING_DASHBOARD_ASSETS [ OK ]',
+        '> EXPERIENCE_STABILIZED.',
         '',
-        'developer.loadPortfolio();'
+        '> SHAIKH_PORTFOLIO_INITIATE()'
     ], []);
 
-    const fullCode = useMemo(() => codeLines.join('\n'), [codeLines]);
+    const fullLog = useMemo(() => logLines.join('\n'), [logLines]);
 
     useEffect(() => {
         let index = 0;
-        const typingSpeed = 20;
+        const typingSpeed = 25;
 
         const typeInterval = setInterval(() => {
-            if (index < fullCode.length) {
-                setTypedCode(fullCode.slice(0, index + 1));
+            if (index < fullLog.length) {
+                setTypedCode(fullLog.slice(0, index + 1));
                 index++;
             } else {
                 clearInterval(typeInterval);
+                // Auto-launch after typing
+                setTimeout(() => setIsEnterPressed(true), 1200);
             }
         }, typingSpeed);
 
         return () => clearInterval(typeInterval);
-    }, [fullCode]);
+    }, [fullLog]);
 
     useEffect(() => {
-        const cursorInterval = setInterval(() => {
-            setShowCursor(prev => !prev);
-        }, 530);
-        return () => clearInterval(cursorInterval);
-    }, []);
-
-    const handleEnter = () => {
-        if (typedCode.length >= fullCode.length * 0.8) {
-            setIsEnterPressed(true);
-            setTimeout(() => {
-                setIsExiting(true);
-                setTimeout(onComplete, 800);
-            }, 500);
+        if (isEnterPressed) {
+            const timer = setTimeout(onComplete, 1200);
+            return () => clearTimeout(timer);
         }
+    }, [isEnterPressed, onComplete]);
+
+    const highlightLogs = (text) => {
+        return text.split('\n').map((line, i) => {
+            let highlighted = line;
+            // Highlight Command Prompt >
+            highlighted = highlighted.replace(/^>/g, '<span style="color: var(--primary)">></span>');
+            // Highlight Labels:
+            highlighted = highlighted.replace(/\b(IDENTITY|ROLE|TECH_STACK|STATUS|ASSETS)\b/g, '<span style="color: var(--secondary)">$1</span>');
+            // Highlight OK status [ OK ]
+            highlighted = highlighted.replace(/\[ OK \]/g, '<span style="color: var(--accent)">[ OK ]</span>');
+            // Highlight Success markers
+            highlighted = highlighted.replace(/\b(STABILIZED|INITIATE)\b/g, '<span style="color: var(--warning)">$1</span>');
+            
+            return <div key={i} dangerouslySetInnerHTML={{ __html: highlighted || '&nbsp;' }} />;
+        });
     };
 
-    useEffect(() => {
-        if (typedCode === fullCode) {
-            const triggerEnter = () => {
-                if (typedCode.length >= fullCode.length * 0.8) {
-                    setIsEnterPressed(true);
-                    setTimeout(() => {
-                        setIsExiting(true);
-                        setTimeout(onComplete, 800);
-                    }, 500);
-                }
-            };
-            const autoEnter = setTimeout(triggerEnter, 1500);
-            return () => clearTimeout(autoEnter);
-        }
-    }, [typedCode, fullCode, onComplete]);
-
     return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            background: 'radial-gradient(circle at 50% 50%, #0a0a0f 0%, #000000 100%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            opacity: isExiting ? 0 : 1,
-            transform: isExiting ? 'scale(30)' : 'scale(1)',
-            filter: isExiting ? 'blur(10px)' : 'blur(0)',
-            transition: 'transform 0.8s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.8s cubic-bezier(0.7, 0, 0.3, 1), filter 0.8s ease'
-        }}>
-            {/* Background glow */}
-            <div style={{
-                position: 'absolute',
-                width: 'min(500px, 90vw)',
-                height: 'min(500px, 90vw)',
-                background: 'radial-gradient(circle, rgba(0, 243, 255, 0.1) 0%, rgba(188, 19, 254, 0.05) 40%, transparent 70%)',
-                filter: 'blur(60px)',
-                pointerEvents: 'none'
-            }} />
-
-            {/* Laptop */}
-            <div style={{
-                position: 'relative',
+        <motion.div 
+            initial={{ opacity: 1 }}
+            exit={{ 
+                opacity: 0,
+                scale: 1.2,
+                filter: "blur(20px)",
+                transition: { duration: 1, ease: "easeInOut" }
+            }}
+            style={{
+                position: 'fixed',
+                inset: 0,
+                background: '#030014',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                animation: 'float 6s ease-in-out infinite'
-            }}>
-                {/* Screen */}
-                <div style={{
-                    width: 'min(380px, 85vw)',
-                    height: 'min(240px, 50vw)',
-                    background: '#050505',
-                    borderRadius: '4px 4px 0 0',
-                    border: '1px solid rgba(0, 243, 255, 0.3)',
-                    padding: 'min(15px, 3vw)',
-                    boxShadow: isEnterPressed
-                        ? '0 0 100px rgba(0, 243, 255, 0.4), 0 0 150px rgba(255, 0, 255, 0.2)'
-                        : '0 20px 60px rgba(0, 0, 0, 0.8)',
-                    transition: 'box-shadow 0.5s ease'
-                }}>
-                    {/* Screen content */}
-                    <div style={{
-                        width: '100%',
-                        height: '100%',
-                        background: '#000',
-                        borderRadius: '2px',
-                        padding: 'min(15px, 2.5vw)',
-                        fontFamily: '"Fira Code", "SF Mono", "Consolas", monospace',
-                        fontSize: 'clamp(8px, 2.5vw, 12px)',
-                        lineHeight: '1.6',
-                        overflow: 'hidden',
-                        border: '1px solid #1a1a1a'
-                    }}>
-                        {/* Window controls */}
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            marginBottom: '15px',
-                            paddingBottom: '10px',
-                            borderBottom: '1px solid #1a1a1a'
-                        }}>
-                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff0055' }} />
-                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ffea00' }} />
-                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00ff9d' }} />
-                            <span style={{ marginLeft: '15px', color: '#56697a', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>SYSTEM.INIT</span>
-                        </div>
+                justifyContent: 'center',
+                zIndex: 9999,
+                overflow: 'hidden'
+            }}
+        >
+            {/* Background Glows */}
+            <motion.div 
+                animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3]
+                }}
+                transition={{ duration: 5, repeat: Infinity }}
+                style={{
+                    position: 'absolute',
+                    width: '60vw',
+                    height: '60vw',
+                    background: 'radial-gradient(circle, var(--primary-glow) 0%, transparent 70%)',
+                    filter: 'blur(80px)',
+                    top: '-10%',
+                    right: '-10%',
+                    pointerEvents: 'none'
+                }}
+            />
+            <motion.div 
+                animate={{ 
+                    scale: [1.2, 1, 1.2],
+                    opacity: [0.3, 0.5, 0.3]
+                }}
+                transition={{ duration: 7, repeat: Infinity }}
+                style={{
+                    position: 'absolute',
+                    width: '50vw',
+                    height: '50vw',
+                    background: 'radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%)',
+                    filter: 'blur(100px)',
+                    bottom: '-10%',
+                    left: '-10%',
+                    pointerEvents: 'none'
+                }}
+            />
 
-                        {/* Code */}
-                        <pre style={{
-                            margin: 0,
-                            color: '#e0faff',
-                            whiteSpace: 'pre-wrap',
-                            wordBreak: 'break-all',
-                            textShadow: '0 0 5px rgba(0, 243, 255, 0.3)'
-                        }}>
-                            <code>
-                                {typedCode.split('\n').map((line, i) => (
-                                    <div key={i} style={{ minHeight: '18px' }}>
-                                        {line.includes('const') && <><span style={{ color: '#ff00ff' }}>const </span><span style={{ color: '#00f3ff' }}>{line.replace('const ', '')}</span></>}
-                                        {line.includes('name:') && <span><span style={{ color: '#bc13fe' }}>  name</span>: <span style={{ color: '#ffea00' }}>"{line.split('"')[1]}"</span>,</span>}
-                                        {line.includes('role:') && <span><span style={{ color: '#bc13fe' }}>  role</span>: <span style={{ color: '#ffea00' }}>"{line.split('"')[1]}"</span>,</span>}
-                                        {line.includes('skills:') && <span><span style={{ color: '#bc13fe' }}>  skills</span>: [<span style={{ color: '#00ff9d' }}>"Flutter", "Vue.js", "MySQL"</span>],</span>}
-                                        {line.includes('passion:') && <span><span style={{ color: '#bc13fe' }}>  passion</span>: <span style={{ color: '#ffea00' }}>"{line.split('"')[1]}"</span></span>}
-                                        {line === '};' && <span style={{ color: '#00f3ff' }}>{'};'}</span>}
-                                        {line === '' && <br />}
-                                        {line.includes('loadPortfolio') && <span style={{ color: '#ff00ff' }}>{line}</span>}
-                                    </div>
-                                ))}
-                                {showCursor && <span style={{
-                                    background: '#00f3ff',
-                                    color: '#000',
-                                    padding: '0 2px',
-                                    boxShadow: '0 0 10px #00f3ff'
-                                }}>|</span>}
-                            </code>
-                        </pre>
-                    </div>
+            <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                style={{
+                    width: 'min(500px, 90vw)',
+                    background: 'rgba(10, 1, 24, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    borderRadius: '16px',
+                    border: '1px solid var(--glass-border)',
+                    boxShadow: isEnterPressed 
+                        ? '0 0 50px var(--primary-glow), 0 0 100px var(--secondary-glow)'
+                        : '0 20px 50px rgba(0,0,0,0.5)',
+                    overflow: 'hidden',
+                    position: 'relative'
+                }}
+            >
+                <div style={{
+                    padding: '12px 16px',
+                    background: 'rgba(255,255,255,0.03)',
+                    borderBottom: '1px solid var(--glass-border)',
+                    display: 'flex',
+                    gap: '8px'
+                }}>
+                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff5f57' }} />
+                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#febc2e' }} />
+                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28c840' }} />
+                </div>
+                
+                <div style={{
+                    padding: '24px',
+                    fontFamily: 'var(--font-code)',
+                    fontSize: '14px',
+                    lineHeight: '1.8',
+                    minHeight: '220px',
+                    color: 'var(--text-main)'
+                }}>
+                    {highlightLogs(typedCode)}
+                    <motion.span
+                        animate={{ opacity: [1, 0] }}
+                        transition={{ duration: 0.8, repeat: Infinity }}
+                        style={{
+                            display: 'inline-block',
+                            width: '8px',
+                            height: '1.2em',
+                            background: 'var(--primary)',
+                            verticalAlign: 'middle',
+                            marginLeft: '4px',
+                            boxShadow: '0 0 8px var(--primary)'
+                        }}
+                    />
                 </div>
 
-                {/* Laptop base */}
-                <div style={{
-                    width: 'min(420px, 95vw)',
-                    height: '12px',
-                    background: '#1a1a1a',
-                    borderRadius: '0 0 4px 4px',
-                    boxShadow: '0 0 20px rgba(0, 243, 255, 0.1)',
-                    border: '1px solid #333',
-                    borderTop: 'none'
-                }}>
-                    {/* Trackpad notch */}
-                    <div style={{
-                        width: '80px',
-                        height: '2px',
-                        background: '#00f3ff',
-                        borderRadius: '2px',
-                        margin: '0 auto',
-                        marginTop: '0px',
-                        boxShadow: '0 0 10px #00f3ff'
-                    }} />
-                </div>
-            </div>
+                <AnimatePresence>
+                    {isEnterPressed && (
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: '100%' }}
+                            style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                height: '2px',
+                                background: 'linear-gradient(90deg, var(--primary), var(--secondary))',
+                                zIndex: 10
+                            }}
+                        />
+                    )}
+                </AnimatePresence>
+            </motion.div>
 
-            {/* Enter button */}
-            <button
-                onClick={handleEnter}
-                disabled={typedCode.length < fullCode.length * 0.5}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isEnterPressed ? 1 : 0 }}
                 style={{
                     marginTop: '2rem',
-                    padding: 'min(18px, 3vw) min(60px, 10vw)',
-                    fontSize: 'clamp(0.9rem, 3vw, 1.2rem)',
-                    fontWeight: '600',
-                    fontFamily: '"Space Grotesk", sans-serif',
-                    textTransform: 'uppercase',
+                    color: 'var(--primary)',
+                    fontFamily: 'var(--font-display)',
                     letterSpacing: '2px',
-                    background: typedCode.length >= fullCode.length * 0.8
-                        ? 'rgba(0, 243, 255, 0.1)'
-                        : 'rgba(255,255,255,0.02)',
-                    color: typedCode.length >= fullCode.length * 0.8 ? '#00f3ff' : 'rgba(255,255,255,0.2)',
-                    border: typedCode.length >= fullCode.length * 0.8 ? '1px solid #00f3ff' : '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '2px',
-                    cursor: typedCode.length >= fullCode.length * 0.8 ? 'pointer' : 'not-allowed',
-                    transition: 'all 0.3s ease',
-                    transform: isEnterPressed ? 'scale(0.95)' : 'scale(1)',
-                    boxShadow: typedCode.length >= fullCode.length * 0.8
-                        ? '0 0 20px rgba(0, 243, 255, 0.2)'
-                        : 'none'
+                    fontSize: '0.8rem',
+                    textTransform: 'uppercase'
                 }}
             >
-                {isEnterPressed ? '⚡ INITIALIZING...' : '> ENTER SYSTEM'}
-            </button>
-
-            {/* Skip button */}
-            <button
-                onClick={() => {
-                    setIsExiting(true);
-                    setTimeout(onComplete, 500);
-                }}
-                style={{
-                    marginTop: '1.5rem',
-                    padding: '10px 28px',
-                    fontSize: '0.9rem',
-                    background: 'transparent',
-                    color: 'rgba(255,255,255,0.4)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    borderRadius: '25px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    fontFamily: 'inherit'
-                }}
-                onMouseEnter={e => {
-                    e.target.style.color = 'rgba(255,255,255,0.8)';
-                    e.target.style.borderColor = 'rgba(255,255,255,0.3)';
-                }}
-                onMouseLeave={e => {
-                    e.target.style.color = 'rgba(255,255,255,0.4)';
-                    e.target.style.borderColor = 'rgba(255,255,255,0.15)';
-                }}
-            >
-                Skip Intro →
-            </button>
-
-            <style>{`
-                @keyframes float {
-                    0%, 100% { transform: translateY(0px) rotateX(2deg); }
-                    50% { transform: translateY(-15px) rotateX(-2deg); }
-                }
-            `}</style>
-        </div>
+                Initializing Experience...
+            </motion.div>
+        </motion.div>
     );
 };
 

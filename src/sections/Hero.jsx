@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { FaDownload, FaArrowRight } from 'react-icons/fa';
 import ThreeScene from '../components/ThreeScene';
 
 const Hero = () => {
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
-
     const roles = ['Full Stack Developer', 'App Developer', 'UI/UX Enthusiast', 'Problem Solver'];
     const [currentRole, setCurrentRole] = useState(0);
+
+    const { scrollY } = useScroll();
+    const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+    const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -19,166 +18,244 @@ const Hero = () => {
         return () => clearInterval(interval);
     }, [roles.length]);
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.3,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: { duration: 0.8, ease: "easeOut" },
+        },
+    };
+
     return (
-        <section id="home" className="section container" style={{
+        <section id="home" style={{
+            position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            minHeight: '100vh',
-            gap: '3rem',
-            flexWrap: 'wrap',
-            paddingTop: '120px'
+            minHeight: '100%',
+            gap: '2rem',
+            flexWrap: 'nowrap',
+            padding: '40px 60px',
+            overflow: 'visible',
+            fontFamily: 'var(--font-code)'
         }}>
-            <div
+            {/* Background Decoration */}
+            <div style={{
+                position: 'absolute',
+                top: '20%',
+                left: '-10%',
+                width: '40vw',
+                height: '40vw',
+                background: 'radial-gradient(circle, var(--primary-glow) 0%, transparent 70%)',
+                filter: 'blur(100px)',
+                opacity: 0.3,
+                zIndex: -1,
+                pointerEvents: 'none'
+            }} />
+
+            <motion.div
                 className="hero-content"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
                 style={{
-                    flex: '1 1 500px',
-                    opacity: isVisible ? 1 : 0,
-                    transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-                    transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                    flex: '1 1 400px',
+                    zIndex: 2,
+                    y: y1,
+                    opacity: opacity,
+                    paddingTop: '20px'
                 }}
             >
-                <div style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '10px 20px',
-                    background: 'rgba(110, 231, 183, 0.1)',
-                    border: '1px solid rgba(110, 231, 183, 0.25)',
-                    borderRadius: '30px',
-                    marginBottom: '1.5rem',
-                    boxShadow: '0 4px 20px rgba(110, 231, 183, 0.1)'
-                }}>
+                {/* Status Badge */}
+                <motion.div 
+                    variants={itemVariants}
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '10px 20px',
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid var(--glass-border)',
+                        borderRadius: '50px',
+                        marginBottom: '2rem',
+                        boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+                    }}
+                >
                     <span style={{
-                        width: '8px',
-                        height: '8px',
-                        background: '#6ee7b7',
-                        boxShadow: '0 0 12px #6ee7b7',
+                        width: '10px',
+                        height: '10px',
+                        background: 'var(--accent)',
+                        boxShadow: `0 0 15px var(--accent)`,
                         borderRadius: '50%',
-                        animation: 'pulse 2s infinite'
-                    }}></span>
+                        position: 'relative'
+                    }}>
+                        <motion.span 
+                            animate={{ scale: [1, 2, 1], opacity: [0.5, 0, 0.5] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: 'var(--accent)',
+                                borderRadius: '50%'
+                            }}
+                        />
+                    </span>
                     <span style={{ 
                         fontSize: '0.85rem', 
-                        color: '#6ee7b7',
-                        fontFamily: 'var(--font-main)',
-                        letterSpacing: '0.5px',
-                        fontWeight: '500'
+                        color: 'var(--text-main)',
+                        fontWeight: '600',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase'
                     }}>
-                        Available for Work
+                        Ready to launch new systems
                     </span>
-                </div>
+                </motion.div>
 
-                <h3 style={{ 
-                    fontSize: '1rem',
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    fontWeight: '500',
-                    color: 'var(--secondary)',
+                <motion.h3 variants={itemVariants} style={{ 
+                    fontSize: '1.2rem', 
+                    color: 'var(--primary)',
+                    fontFamily: 'var(--font-display)',
+                    letterSpacing: '4px',
                     marginBottom: '0.5rem',
-                    opacity: 0.9
-                }}>Hello, I'm</h3>
-                <h1 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-                    fontWeight: '800',
-                    lineHeight: '1.1',
-                    marginBottom: '0.75rem',
-                    background: 'linear-gradient(135deg, #f0f9ff 0%, #6ee7b7 50%, #c084fc 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
-                }}>Aabid Hussain Shaikh</h1>
-                <h2 key={currentRole} style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(1.25rem, 3vw, 2rem)',
-                    fontWeight: '600',
-                    background: 'linear-gradient(90deg, #6ee7b7 0%, #38bdf8 50%, #c084fc 100%)',
-                    backgroundSize: '200% auto',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                    animation: 'fadeInUp 0.5s ease-out, gradientFlow 3s linear infinite',
-                    marginBottom: '1.5rem'
+                    textTransform: 'uppercase'
                 }}>
-                    {roles[currentRole]}
-                </h2>
-                <p style={{
+                    Hello, I'm
+                </motion.h3>
+
+                <motion.h1 variants={itemVariants} style={{ 
+                    fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                    lineHeight: '1.1',
+                    marginBottom: '1rem',
+                    fontWeight: '800',
+                    color: '#ffffff'
+                }}>
+                    Aabid Hussain <br />
+                    <span className="text-glow" style={{ color: 'var(--secondary)' }}>Shaikh</span>
+                </motion.h1>
+
+                <motion.div variants={itemVariants} style={{ height: '3rem' }}>
+                    <AnimatePresence mode="wait">
+                        <motion.h2 
+                            key={currentRole}
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -20, opacity: 0 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            style={{
+                                fontSize: '1.8rem',
+                                color: 'var(--text-secondary)',
+                                fontWeight: '400',
+                                fontFamily: 'var(--font-display)'
+                            }}
+                        >
+                            {roles[currentRole]}
+                        </motion.h2>
+                    </AnimatePresence>
+                </motion.div>
+                
+                <motion.p variants={itemVariants} style={{
                     fontSize: '1.1rem',
                     color: 'var(--text-secondary)',
-                    lineHeight: '1.8',
                     maxWidth: '500px',
+                    lineHeight: '1.8',
+                    marginTop: '1.5rem',
+                    paddingLeft: '1.5rem',
                     borderLeft: '2px solid var(--primary)',
-                    paddingLeft: '1rem',
-                    background: 'linear-gradient(90deg, rgba(0, 243, 255, 0.05), transparent)'
+                    background: 'linear-gradient(90deg, var(--bg-glass), transparent)'
                 }}>
-                    I craft accessible, pixel-perfect, and high-performance web experiences.
-                    Passionate about building beautiful interfaces with cutting-edge technologies
-                    that make a real impact.
-                </p>
+                    Engineering high‑performance digital architectures. 
+                    I bridge the gap between design and technology with precise, scalable source code.
+                </motion.p>
 
-                <div className="hero-btns" style={{
+                {/* CTA Buttons */}
+                <motion.div 
+                    variants={itemVariants}
+                    style={{
+                        display: 'flex',
+                        gap: '1.5rem',
+                        marginTop: '3rem',
+                        flexWrap: 'wrap'
+                    }}
+                >
+                    <motion.a 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        href={`${import.meta.env.BASE_URL}Aabid-Hussain-Shaikh-Resume.pdf`} 
+                        download 
+                        className="soft-btn primary"
+                        style={{
+                            padding: '16px 32px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            fontSize: '1rem'
+                        }}
+                    >
+                        Download CV <FaDownload />
+                    </motion.a>
+                    <motion.a 
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        href="#contact" 
+                        className="soft-btn"
+                        style={{
+                            padding: '16px 32px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            fontSize: '1rem',
+                            border: '1px solid var(--glass-border)'
+                        }}
+                    >
+                        Contact Me <FaArrowRight />
+                    </motion.a>
+                </motion.div>
+            </motion.div>
+
+            {/* 3D Scene Wrapper */}
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
+                className="hero-image" 
+                style={{
+                    flex: '1.2 1 400px',
+                    minWidth: '450px',
+                    height: '550px',
                     display: 'flex',
-                    gap: '1rem',
-                    marginTop: '2.5rem',
-                    flexWrap: 'wrap'
-                }}>
-                    <a href={`${import.meta.env.BASE_URL}Aabid-Hussain-Shaikh-Resume.pdf`} download className="soft-btn primary">
-                        Download CV <FaDownload style={{ fontSize: '0.9rem' }} />
-                    </a>
-                    <a href="#contact" className="soft-btn">
-                        Contact Me <FaArrowRight style={{ fontSize: '0.85rem' }} />
-                    </a>
-                </div>
-
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'relative',
+                    overflow: 'visible'
+                }}
+            >
+                {/* Glow behind 3D */}
                 <div style={{
-                    display: 'flex',
-                    gap: '3rem',
-                    marginTop: '4rem',
-                    paddingTop: '2rem',
-                    borderTop: '1px solid rgba(148, 163, 184, 0.15)'
-                }}>
-                    <div>
-                        <h4 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            color: 'var(--primary)',
-                            textShadow: '0 0 20px var(--primary-glow)'
-                        }}>6+</h4>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Years Experience</p>
-                    </div>
-                    <div>
-                        <h4 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            color: 'var(--secondary)',
-                            textShadow: '0 0 20px var(--secondary-glow)'
-                        }}>50+</h4>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Projects Done</p>
-                    </div>
-                    <div>
-                        <h4 style={{
-                            fontSize: '2rem',
-                            fontWeight: '700',
-                            color: 'var(--accent)',
-                            textShadow: '0 0 20px var(--accent-glow)'
-                        }}>20+</h4>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Happy Clients</p>
-                    </div>
+                    position: 'absolute',
+                    width: '300px',
+                    height: '300px',
+                    background: 'var(--secondary-glow)',
+                    filter: 'blur(100px)',
+                    borderRadius: '50%',
+                    zIndex: 0
+                }} />
+                <div key="three-wrapper" style={{ width: '100%', height: '100%' }}>
+                    <ThreeScene />
                 </div>
-            </div>
-
-            <div className="hero-image" style={{
-                flex: '1 1 450px',
-                height: '500px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateX(0)' : 'translateX(30px)',
-                transition: 'all 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s'
-            }}>
-                <ThreeScene />
-            </div>
+            </motion.div>
         </section>
     );
 };
