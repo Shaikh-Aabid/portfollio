@@ -10,6 +10,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    
+    # 💎 Critical: Grant write permissions for deployment
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Repository
