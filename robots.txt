@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shaikh-aabid.github.io/portfollio/sitemap.xml
