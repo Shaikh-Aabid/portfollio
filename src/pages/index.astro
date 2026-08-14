@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+
+import data from '../../shared/data.json' assert { type: 'json' };
+---
+
+<BaseLayout title={`${data.name} | ${data.title}`}>
+  <Hero
+    name={data.name}
+    role={data.title}
+    location={data.location}
+    bio={data.bio}
+  />
+  <About
+    years={data.years}
+    projects={data.projects}
+    bio={data.aboutText}
+  />
+  <Skills skills={data.skills} />
+  <Projects featuredProjects={data.featuredProjects} />
+  <Contact
+    email={data.author.email}
+    github={data.author.github}
+    linkedin={data.author.linkedin}
+  />
+</BaseLayout>

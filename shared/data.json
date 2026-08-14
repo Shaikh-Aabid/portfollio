@@ -1,0 +1,90 @@
+{
+  "name": "Aabid Hussain Shaikh",
+  "title": "Full Stack & Mobile Developer",
+  "location": "Mumbai, India",
+  "bio": "I architect scalable systems that solve real problems. 6+ years of shipping production code across web and mobile platforms.",
+  "aboutText": "I started as a PHP developer, fell in love with Laravel's elegance, then expanded into Vue.js for reactive frontends. The mobile world called, and Flutter became my tool of choice for cross-platform apps. Today, I architect full-stack solutions that scale — from database design to deployment pipelines.",
+  "years": "6",
+  "projects": "50",
+  "skills": {
+    "Laravel / PHP": "6y",
+    "Vue.js / Nuxt": "6y",
+    "React / Next.js": "4y",
+    "Flutter / Dart": "4y",
+    "Node.js / Express": "4y",
+    "SQL / NoSQL": "6y",
+    "Docker / DevOps": "3y",
+    "TypeScript": "4y",
+    "Tailwind CSS": "3y",
+    "Firebase": "3y",
+    "GraphQL / REST": "4y",
+    "CI/CD": "3y"
+  },
+  "featuredProjects": [
+    {
+      "name": "E-Commerce Platform",
+      "description": "Multi-vendor marketplace with real-time inventory, payment gateway integration, and admin analytics dashboard.",
+      "stack": ["Vue.js", "Laravel", "MySQL", "Redis"],
+      "type": "web",
+      "highlights": [
+        "Designed multi-tenant database schema isolating vendors by partition",
+        "Built real-time inventory sync using Laravel broadcasting + Vue reactivity",
+        "Integrated Razorpay with webhook reconciliation for settlement flows",
+        "Achieved 99.9% uptime with zero-downtime deployments"
+      ],
+      "screenshot": "/portfollio/screenshots/ecommerce.png",
+      "github": "https://github.com/Shaikh-Aabid",
+      "demo": "#"
+    },
+    {
+      "name": "Social Platform",
+      "description": "Cross-platform social networking app with instant messaging, feed algorithm, and media sharing.",
+      "stack": ["Flutter", "Dart", "Firebase", "Riverpod"],
+      "type": "mobile",
+      "highlights": [
+        "Custom feed ranking algorithm based on engagement recency + affinity scores",
+        "End-to-end encrypted messaging using Signal Protocol via libsignal",
+        "Media pipeline with on-device compression + CDN-backed delivery",
+        "Reached 100K+ downloads within 6 months"
+      ],
+      "screenshot": "/portfollio/screenshots/social.png",
+      "github": "https://github.com/Shaikh-Aabid",
+      "demo": "#"
+    },
+    {
+      "name": "Analytics Dashboard",
+      "description": "Real-time data visualization platform with interactive charts, custom reporting engine, and role-based access.",
+      "stack": ["React", "Node.js", "MongoDB", "Socket.io"],
+      "type": "web",
+      "highlights": [
+        "Streaming data pipeline — WebSocket ingestion → aggregation → chart push in <200ms",
+        "Custom query builder UI that generates MongoDB aggregation pipelines visually",
+        "Role-based access with row-level filtering on every dashboard",
+        "Processes 1M+ events/day with sub-second latency"
+      ],
+      "screenshot": "/portfollio/screenshots/analytics.png",
+      "github": "https://github.com/Shaikh-Aabid",
+      "demo": "#"
+    },
+    {
+      "name": "Healthcare Portal",
+      "description": "Patient management platform with appointment scheduling, EHR integration, and telemedicine support.",
+      "stack": ["Vue.js", "Laravel", "Redis", "WebRTC"],
+      "type": "web",
+      "highlights": [
+        "FHIR-compliant EHR integration layer normalizing 6+ provider formats",
+        "Redis-backed queue system for async video visit orchestration",
+        "Sub-second patient search across 500k+ records using Meilisearch",
+        "HIPAA-compliant with end-to-end encryption"
+      ],
+      "screenshot": "/portfollio/screenshots/healthcare.png",
+      "github": "https://github.com/Shaikh-Aabid",
+      "demo": "#"
+    }
+  ],
+  "author": {
+    "email": "shaikhaabidhussain@gmail.com",
+    "github": "https://github.com/Shaikh-Aabid",
+    "linkedin": "https://www.linkedin.com/in/aabid-hussain-shaikh/"
+  }
+}

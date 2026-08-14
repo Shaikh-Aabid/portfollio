@@ -1,0 +1,138 @@
+---
+interface Props {
+  years: string;
+  projects: string;
+  bio: string;
+}
+
+const { years, projects, bio } = Astro.props;
+---
+
+<section id="about" class="section">
+  <div class="container">
+    <!-- Section Header -->
+    <header class="text-center max-w-2xl mx-auto mb-16 reveal">
+      <span class="label text-cyan-400 mb-4">About Me</span>
+      <h2 class="display-lg mb-4">Full Stack & Mobile Developer</h2>
+      <p class="body-lg text-slate-400 max-w-xl mx-auto">
+        Building scalable, maintainable systems across web and mobile platforms for 6+ years.
+      </p>
+    </header>
+    
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16 reveal stagger-children" style="transition-delay: 200ms;">
+      <div class="glass-strong p-6 text-center hover:scale-[1.02]">
+        <div class="stat-value">{years}+</div>
+        <div class="label text-slate-500 mt-2">Years Experience</div>
+      </div>
+      <div class="glass-strong p-6 text-center hover:scale-[1.02]">
+        <div class="stat-value">{projects}+</div>
+        <div class="label text-slate-500 mt-2">Projects Delivered</div>
+      </div>
+      <div class="glass-strong p-6 text-center hover:scale-[1.02]">
+        <div class="stat-value">8</div>
+        <div class="label text-slate-500 mt-2">Core Technologies</div>
+      </div>
+      <div class="glass-strong p-6 text-center hover:scale-[1.02]">
+        <div class="stat-value">30+</div>
+        <div class="label text-slate-500 mt-2">Happy Clients</div>
+      </div>
+    </div>
+    
+    <!-- Bio Content -->
+    <div class="grid lg:grid-cols-2 gap-8 reveal">
+      <div class="reveal-delay-1">
+        <h3 class="display-md mb-4">My Journey</h3>
+        <p class="body-lg text-slate-300 mb-6">
+          {bio}
+        </p>
+        <p class="body-lg text-slate-400">
+          I started as a PHP developer, fell in love with Laravel's elegance, then expanded into Vue.js for reactive frontends. The mobile world called, and Flutter became my tool of choice for cross-platform apps. Today, I architect full-stack solutions that scale — from database design to deployment pipelines.
+        </p>
+      </div>
+      
+      <div class="reveal-delay-2">
+        <h3 class="display-md mb-6">What I Value</h3>
+        <div class="space-y-4">
+          <div class="glass p-5 flex gap-4 hover:border-cyan-500/50">
+            <div class="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-slate-100 mb-1">Clean Architecture</h4>
+              <p class="body-sm text-slate-400">SOLID principles, modular design, and maintainable codebases that stand the test of time.</p>
+            </div>
+          </div>
+          
+          <div class="glass p-5 flex gap-4 hover:border-emerald-500/50">
+            <div class="w-12 h-12 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-slate-100 mb-1">Performance First</h4>
+              <p class="body-sm text-slate-400">Optimized queries, lazy loading, caching strategies — every millisecond counts for user experience.</p>
+            </div>
+          </div>
+          
+          <div class="glass p-5 flex gap-4 hover:border-violet-500/50">
+            <div class="w-12 h-12 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7.008 17h10.5"></path></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-slate-100 mb-1">Team Collaboration</h4>
+              <p class="body-sm text-slate-400">Clear communication, code reviews, mentoring — great software is built by great teams.</p>
+            </div>
+          </div>
+          
+          <div class="glass p-5 flex gap-4 hover:border-amber-500/50">
+            <div class="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l4 4 4-4"></path></svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-slate-100 mb-1">Continuous Learning</h4>
+              <p class="body-sm text-slate-400">Exploring Rust, Wasm, and AI-assisted development. The stack evolves, so do I.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Timeline -->
+    <div class="mt-16 reveal">
+      <h3 class="display-md text-center mb-10">Professional Journey</h3>
+      <div class="relative max-w-2xl mx-auto">
+        <!-- Timeline Line -->
+        <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent"></div>
+        
+        <div class="space-y-10">
+          <div class="relative reveal stagger-children">
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-cyan-400 border-4 bg-primary z-10"></div>
+            <div class="glass-strong p-6 max-w-md w-full lg:w-[45%] lg:mr-auto pr-10 lg:pr-14 text-right">
+              <span class="badge badge-web mb-3">2023 - Present</span>
+              <h4 class="font-semibold text-slate-100 mb-2">Senior Full Stack Developer</h4>
+              <p class="text-slate-400 text-sm">Leading architecture decisions for enterprise platforms. Mentoring junior developers. Building with Laravel, Vue 3, and Flutter.</p>
+            </div>
+          </div>
+          
+          <div class="relative reveal stagger-children">
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-emerald-400 border-4 bg-primary z-10"></div>
+            <div class="glass-strong p-6 max-w-md w-full lg:w-[45%] lg:ml-auto pl-10 lg:pl-14">
+              <span class="badge badge-mobile mb-3">2021 - 2023</span>
+              <h4 class="font-semibold text-slate-100 mb-2">Full Stack Developer</h4>
+              <p class="text-slate-400 text-sm">Built SaaS products from scratch. Migrated legacy systems to Vue 3 + Laravel. Published 2 Flutter apps to stores.</p>
+            </div>
+          </div>
+          
+          <div class="relative reveal stagger-children">
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-violet-400 border-4 bg-primary z-10"></div>
+            <div class="glass-strong p-6 max-w-md w-full lg:w-[45%] lg:mr-auto pr-10 lg:pr-14 text-right">
+              <span class="badge" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-violet); border-color: var(--accent-violet);">2018 - 2021</span>
+              <h4 class="font-semibold text-slate-100 mb-2">PHP / Laravel Developer</h4>
+              <p class="text-slate-400 text-sm">Started career building e-commerce platforms. Mastered Laravel, MySQL optimization, and RESTful API design.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
