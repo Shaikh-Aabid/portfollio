@@ -1,0 +1,60 @@
+---
+import data from '../../shared/data.json';
+import '../styles/portfolio.css';
+const { title = `${data.name} — Full-stack & mobile developer`, description = data.bio, path = '' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+const canonical = new URL(base + path, Astro.site).href;
+const home = new URL(base, Astro.site).href;
+const image = new URL(`${base}avatar.png`, Astro.site).href;
+const personId = `${home}#person`;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Person', '@id': personId, name: data.name, givenName: 'Aabid Hussain', familyName: 'Shaikh', jobTitle: data.title,
+      description: data.bio, url: home, image, email: `mailto:${data.author.email}`,
+      address: { '@type': 'PostalAddress', addressLocality: 'Navi Mumbai', addressCountry: 'IN' },
+      knowsAbout: Object.keys(data.skills), sameAs: [data.author.github, data.author.linkedin] },
+    { '@type': 'WebSite', '@id': `${home}#website`, url: home, name: `${data.name} — Portfolio`, inLanguage: 'en', publisher: { '@id': personId } },
+    { '@type': path ? 'CollectionPage' : 'ProfilePage', '@id': `${canonical}#page`, url: canonical,
+      name: title, description, inLanguage: 'en', isPartOf: { '@id': `${home}#website` },
+      mainEntity: { '@id': path ? `${canonical}#projects` : personId }, about: { '@id': personId } },
+    { '@type': 'ItemList', '@id': `${canonical}#projects`, name: 'Portfolio projects', numberOfItems: data.featuredProjects.length,
+      itemListElement: data.featuredProjects.map((project, index) => ({
+        '@type': 'ListItem', position: index + 1, item: {
+          '@type': 'CreativeWork', name: project.name, description: project.description,
+          url: `${canonical}#project-${index + 1}`
+        }
+      })) }
+  ]
+};
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{title}</title><meta name="description" content={description}/><meta name="author" content={data.name}/>
+  <link rel="canonical" href={canonical}/><meta name="theme-color" content="#171819"/>
+  <meta property="og:type" content="website"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/>
+  <meta property="og:image" content={image}/><meta property="og:image:width" content="577"/><meta property="og:image:height" content="578"/><meta property="og:image:alt" content={`Illustrated portrait of ${data.name}`}/><meta property="og:locale" content="en_IN"/>
+  <meta name="twitter:image" content={image}/><meta name="twitter:image:alt" content={`Illustrated portrait of ${data.name}`}/>
+  <meta name="robots" content="index,follow,max-image-preview:large"/>
+  <meta name="twitter:card" content="summary"/><meta name="twitter:title" content={title}/><meta name="twitter:description" content={description}/>
+  <link rel="icon" href={`${base}avatar.png`}/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Urbanist:wght@800&display=swap" rel="stylesheet"/>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)}/>
+</head>
+<body>
+  <a href="#main" class="skip">Skip to content</a>
+  <header class="site-header">
+    <nav class="container navigation" aria-label="Main navigation">
+      <a href={base} class="brand" aria-label={`${data.name} home`}><span class="brand-icon" aria-hidden="true">a<span>↗</span></span><span>{data.name.toUpperCase()}<small>INDEPENDENT DEVELOPER</small></span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation-links">Menu <span aria-hidden="true">+</span></button>
+      <div class="nav-links" id="navigation-links"><a href={`${base}#work`}>Work</a><a href={`${base}#about`}>About</a><a href={`${base}#expertise`}>Expertise</a><a class="nav-contact" href={`${base}#contact`}>Let’s talk <span aria-hidden="true">↗</span></a></div>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1"><slot/></main>
+  <footer class="container footer"><a href={base} class="footer-signature">{data.name}<span>↗</span></a><p>© {new Date().getFullYear()} {data.name}<br/>Built with care in Navi Mumbai.</p><div><a href={data.author.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={data.author.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href={`${base}Aabid-Hussain-Shaikh-Resume.pdf`} target="_blank" rel="noopener noreferrer">Résumé ↗</a></div><a class="back-top" href="#main" aria-label="Back to top">↑</a></footer>
+  <script>import '../scripts/portfolio.ts';</script>
+</body>
+</html>

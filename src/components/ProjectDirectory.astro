@@ -1,0 +1,18 @@
+---
+import data from '../../shared/data.json';
+const projects = data.featuredProjects;
+---
+<div class="directory" data-directory>
+  <div class="directory-controls">
+    <div class="filters" role="group" aria-label="Filter projects by platform"><span class="filter-track" aria-hidden="true"></span><button type="button" data-filter="all" aria-pressed="true">All work <span>{projects.length}</span></button><button type="button" data-filter="web" aria-pressed="false">Web</button><button type="button" data-filter="mobile" aria-pressed="false">Mobile</button></div>
+    <label class="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Find a project…" aria-label="Search projects" data-search/></label>
+  </div>
+  <p class="result-count" role="status" data-result>{projects.length} projects · Select a project for details</p>
+  <div class="project-rows">
+    {projects.map((project,index)=><details class="project-row" id={`project-${index+1}`} data-project data-type={project.type} data-search-text={`${project.name} ${project.category} ${project.description} ${project.platforms.join(' ')}`.toLowerCase()}>
+      <summary><span class="row-number">{String(index+1).padStart(2,'0')}</span><h3>{project.name}</h3><span class="row-category">{project.category}</span><span class="row-platform">{project.type === 'mobile' ? 'Mobile' : 'Web'}</span><span class="row-plus" aria-hidden="true">+</span></summary>
+      <div class="row-detail"><p>{project.description}</p><div class="row-links">{project.links.length ? project.links.map(link=><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label} <span aria-hidden="true">↗</span></a>) : <a href={`mailto:${data.author.email}?subject=${encodeURIComponent(`About ${project.name}`)}`}>Ask about this project ↗</a>}</div></div>
+    </details>)}
+  </div>
+  <div class="empty-state" hidden data-empty><h3>No matching projects.</h3><p>Try another name or select a different platform.</p><button type="button" class="text-link" data-reset>Clear filters ↗</button></div>
+</div>
