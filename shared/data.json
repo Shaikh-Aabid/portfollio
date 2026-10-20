@@ -1,11 +1,11 @@
 {
   "name": "Aabid Hussain Shaikh",
   "title": "Full Stack & Mobile Developer",
-  "location": "Mumbai, India",
-  "bio": "I architect scalable systems that solve real problems. 6+ years of shipping production code across web and mobile platforms.",
+  "location": "Navi Mumbai, India",
+  "bio": "Aabid Hussain Shaikh is a Navi Mumbai-based full-stack and mobile developer with 7+ years of experience building web applications, mobile apps, APIs, and scalable software systems.",
   "aboutText": "I started as a PHP developer, fell in love with Laravel's elegance, then expanded into Vue.js for reactive frontends. The mobile world called, and Flutter became my tool of choice for cross-platform apps. Today, I architect full-stack solutions that scale — from database design to deployment pipelines.",
-  "years": "6",
-  "projects": "50",
+  "years": "7",
+  "projects": "Many",
   "skills": {
     "Laravel / PHP": "6y",
     "Vue.js / Nuxt": "6y",
@@ -84,6 +84,7 @@
   ],
   "author": {
     "email": "shaikhaabidhussain@gmail.com",
+    "phone": "+91 88985 39930",
     "github": "https://github.com/Shaikh-Aabid",
     "linkedin": "https://www.linkedin.com/in/aabid-hussain-shaikh/"
   }
