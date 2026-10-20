@@ -22,64 +22,307 @@
   },
   "featuredProjects": [
     {
-      "name": "E-Commerce Platform",
-      "description": "Multi-vendor marketplace with real-time inventory, payment gateway integration, and admin analytics dashboard.",
-      "stack": ["Vue.js", "Laravel", "MySQL", "Redis"],
+      "name": "Rex Xchange",
+      "description": "A web-based product experience for Rex Xchange, giving users direct access to the platform. Visit the live site to explore its features.",
+      "stack": [],
       "type": "web",
-      "highlights": [
-        "Designed multi-tenant database schema isolating vendors by partition",
-        "Built real-time inventory sync using Laravel broadcasting + Vue reactivity",
-        "Integrated Razorpay with webhook reconciliation for settlement flows",
-        "Achieved 99.9% uptime with zero-downtime deployments"
+      "category": "Web platform",
+      "platforms": [
+        "Web"
       ],
-      "screenshot": "/portfollio/screenshots/ecommerce.png",
-      "github": "https://github.com/Shaikh-Aabid",
-      "demo": "#"
+      "links": [
+        {
+          "label": "Visit website",
+          "url": "https://rexxchange.com/"
+        }
+      ]
     },
     {
-      "name": "Social Platform",
-      "description": "Cross-platform social networking app with instant messaging, feed algorithm, and media sharing.",
-      "stack": ["Flutter", "Dart", "Firebase", "Riverpod"],
+      "name": "ChooseApp",
+      "description": "A mobility app that compares cab options across providers by price, ETA, ratings, and reviews, then helps riders book a suitable ride.",
+      "stack": [],
       "type": "mobile",
-      "highlights": [
-        "Custom feed ranking algorithm based on engagement recency + affinity scores",
-        "End-to-end encrypted messaging using Signal Protocol via libsignal",
-        "Media pipeline with on-device compression + CDN-backed delivery",
-        "Reached 100K+ downloads within 6 months"
+      "category": "Mobility · booking",
+      "platforms": [
+        "Web",
+        "Android",
+        "iOS"
       ],
-      "screenshot": "/portfollio/screenshots/social.png",
-      "github": "https://github.com/Shaikh-Aabid",
-      "demo": "#"
+      "links": [
+        {
+          "label": "Website",
+          "url": "https://chooseapp.in/"
+        },
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/search?q=chooseapp&c=apps&hl=en"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/in/app/choose-app-compare-cab-prices/id6663954160"
+        }
+      ]
     },
     {
-      "name": "Analytics Dashboard",
-      "description": "Real-time data visualization platform with interactive charts, custom reporting engine, and role-based access.",
-      "stack": ["React", "Node.js", "MongoDB", "Socket.io"],
-      "type": "web",
-      "highlights": [
-        "Streaming data pipeline — WebSocket ingestion → aggregation → chart push in <200ms",
-        "Custom query builder UI that generates MongoDB aggregation pipelines visually",
-        "Role-based access with row-level filtering on every dashboard",
-        "Processes 1M+ events/day with sub-second latency"
+      "name": "Walkies",
+      "description": "A pet-care platform for booking dog walks and related services, with app features for scheduling and tracking walks.",
+      "stack": [],
+      "type": "mobile",
+      "category": "Pet care · mobile app",
+      "platforms": [
+        "Web",
+        "Android"
       ],
-      "screenshot": "/portfollio/screenshots/analytics.png",
-      "github": "https://github.com/Shaikh-Aabid",
-      "demo": "#"
+      "links": [
+        {
+          "label": "Website",
+          "url": "https://walkiesletsroll.com/index.html"
+        },
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.walkies.petcare&hl=en"
+        }
+      ]
     },
     {
-      "name": "Healthcare Portal",
-      "description": "Patient management platform with appointment scheduling, EHR integration, and telemedicine support.",
-      "stack": ["Vue.js", "Laravel", "Redis", "WebRTC"],
-      "type": "web",
-      "highlights": [
-        "FHIR-compliant EHR integration layer normalizing 6+ provider formats",
-        "Redis-backed queue system for async video visit orchestration",
-        "Sub-second patient search across 500k+ records using Meilisearch",
-        "HIPAA-compliant with end-to-end encryption"
+      "name": "Aadab",
+      "description": "An online clothing shop for kurtas, school uniforms, women’s clothing, and kids’ apparel, available through its website and Android app.",
+      "stack": [],
+      "type": "mobile",
+      "category": "E-commerce · fashion",
+      "platforms": [
+        "Web",
+        "Android"
       ],
-      "screenshot": "/portfollio/screenshots/healthcare.png",
-      "github": "https://github.com/Shaikh-Aabid",
-      "demo": "#"
+      "links": [
+        {
+          "label": "Website",
+          "url": "https://aadab.online/"
+        },
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.crazzycode.aadab&hl=en"
+        }
+      ]
+    },
+    {
+      "name": "Reverse Diagnostics",
+      "description": "An Android device-diagnostics app with hardware checks for battery, sensors, connectivity, and screen, plus downloadable PDF reports.",
+      "stack": [],
+      "type": "mobile",
+      "category": "Device diagnostics",
+      "platforms": [
+        "Android"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.crazzycodes.reversediag&hl=en"
+        }
+      ]
+    },
+    {
+      "name": "We Alliance",
+      "description": "An employee management app for organizational records and workflows covering leave, expenses, travel, and training.",
+      "stack": [],
+      "type": "mobile",
+      "category": "Workforce management",
+      "platforms": [
+        "Android"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=com.az.wealliance&hl=en"
+        }
+      ]
+    },
+    {
+      "name": "VOP",
+      "description": "A browser-based web portal for VOP. Open the live portal to view the available product experience.",
+      "stack": [],
+      "type": "web",
+      "category": "Web portal",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Open portal",
+          "url": "https://vop.aaibuzz.com/"
+        }
+      ]
+    },
+    {
+      "name": "PMS Internal",
+      "description": "An internal workforce app for tracking attendance and expenses, with tools for recording activity and managing reports.",
+      "stack": [],
+      "type": "mobile",
+      "category": "Internal operations",
+      "platforms": [
+        "Android"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=org.pms.pmsInternal&hl=en"
+        }
+      ]
+    },
+    {
+      "name": "SmartRecruit",
+      "description": "A recruitment app for managing job postings and applicants, with candidate profiles, job search, application tracking, and in-app communication.",
+      "stack": [],
+      "type": "mobile",
+      "category": "Recruitment",
+      "platforms": [
+        "Android"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=org.pms.recruiter&hl=en"
+        }
+      ]
+    },
+    {
+      "name": "Store Vyu",
+      "description": "A workforce and sales app for attendance and leave requests, including leave approvals and order entry for sales employees.",
+      "stack": [],
+      "type": "mobile",
+      "category": "Workforce · sales",
+      "platforms": [
+        "Android"
+      ],
+      "links": [
+        {
+          "label": "Google Play",
+          "url": "https://play.google.com/store/apps/details?id=org.pms.storeVYU&hl=en"
+        }
+      ]
+    },
+    {
+      "name": "Landbridge",
+      "description": "A crew-management web application for managing crew members, their courses, and position assignments.",
+      "stack": [],
+      "type": "web",
+      "category": "Maritime · crew management",
+      "platforms": [
+        "Web"
+      ],
+      "links": []
+    },
+    {
+      "name": "Sales Register – Mamaearth",
+      "description": "An internal web portal for Mamaearth sales-register workflows, giving authorized users access to sales operations.",
+      "stack": [],
+      "type": "web",
+      "category": "Sales operations",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Open portal",
+          "url": "http://me.aaibuzz.com/login"
+        }
+      ]
+    },
+    {
+      "name": "The Warden Group (Infakt)",
+      "description": "An educational platform that connects school learning with current affairs and general awareness through articles and formative assessments.",
+      "stack": [],
+      "type": "web",
+      "category": "Education · learning",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Visit website",
+          "url": "https://infakt.co.in/"
+        }
+      ]
+    },
+    {
+      "name": "Aethon Marine",
+      "description": "A corporate website for a marine consultancy group offering maritime and offshore services such as inspections, surveys, audits, and engineering support.",
+      "stack": [],
+      "type": "web",
+      "category": "Maritime · consultancy",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Visit website",
+          "url": "https://aethon-marine.com/"
+        }
+      ]
+    },
+    {
+      "name": "Legacy Ship Management",
+      "description": "A corporate website for a ship-management company covering technical, crew, project, and commercial management services.",
+      "stack": [],
+      "type": "web",
+      "category": "Maritime · ship management",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Visit website",
+          "url": "https://legacyships.com/"
+        }
+      ]
+    },
+    {
+      "name": "Speed Marine",
+      "description": "A marine-services website presenting the company’s global marine operations and maritime support services.",
+      "stack": [],
+      "type": "web",
+      "category": "Maritime · marine services",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Visit website",
+          "url": "https://seaspeed.in/"
+        }
+      ]
+    },
+    {
+      "name": "Alpha Trader (Trade Advisor)",
+      "description": "A web presence for Alpha Trader’s trade-advisory service. Visit the site to explore its offering.",
+      "stack": [],
+      "type": "web",
+      "category": "Trading · advisory",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Visit website",
+          "url": "https://alphaatrader.com/"
+        }
+      ]
+    },
+    {
+      "name": "CRM (Alpha Trader)",
+      "description": "A web-based CRM portal for Alpha Trader, providing a dedicated workspace for its customer and business workflows.",
+      "stack": [],
+      "type": "web",
+      "category": "CRM · web portal",
+      "platforms": [
+        "Web"
+      ],
+      "links": [
+        {
+          "label": "Open portal",
+          "url": "https://portal.alphaatrader.com/"
+        }
+      ]
     }
   ],
   "author": {

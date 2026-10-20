@@ -1,6 +1,6 @@
 ---
 import data from '../../shared/data.json' assert { type: 'json' };
-const projects = data.featuredProjects;
+const projects = data.featuredProjects.slice(0, 4);
 const stackGroups = [
   { name: 'Frontend', items: ['Vue.js / Nuxt', 'React / Next.js', 'TypeScript', 'Tailwind CSS'] },
   { name: 'Backend & APIs', items: ['Laravel / PHP', 'Node.js / Express', 'GraphQL / REST'] },
